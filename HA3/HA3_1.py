@@ -34,7 +34,7 @@ def main():
     print(Q)
     C = C_norm(C, S)
 
-    energy_criterion = 10**(-5)*electron_volt_to_hartree
+    energy_criterion = 10**(-5.)*electron_volt_to_hartree
     E_G_tmp = 1
     E_G = 0
     while (abs(E_G-E_G_tmp) > energy_criterion):
@@ -80,15 +80,15 @@ def calc_Q(alpha_p, alpha_r, alpha_q, alpha_s):
 #     return np.e**(-alpha*r**2)
 
 def calc_S(alpha_p, alpha_q):
-    return 2*(np.pi/(alpha_p + alpha_q))**(3/2)
+    return 2*(np.pi/(alpha_p + alpha_q))**(3./2.)
 
 def calc_h(alpha_p, alpha_q):
-    return 6*alpha_q*alpha_p*(np.pi)**(3/2)/((alpha_p+alpha_q)**(5/2))
+    return 6*alpha_q*alpha_p*(np.pi)**(3./2.)/((alpha_p+alpha_q)**(5./2.))
 
-def C_norm(C, S):
+def C_norm(C, S, ni=4):
     summ = 0
-    for p in range(4):
-        for q in range(4):
+    for p in range(ni):
+        for q in range(ni):
             summ += C[p]*S[p, q]*C[q]
     return C/np.sqrt(summ)
 
