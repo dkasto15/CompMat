@@ -33,7 +33,7 @@ def main():
     print('Q')
     print(Q)
     C = C_norm(C, S)
-# hej
+
     energy_criterion = 10**(-5)*electron_volt_to_hartree
     E_G_tmp = 1
     E_G = 0
