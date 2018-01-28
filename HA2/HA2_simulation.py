@@ -15,7 +15,7 @@ for energy in [E_al, 100, 200, 300, 400, 500, 600, 700, 800]:
     calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
-                mixer=Mixer(beta=0.1, nmaxold=5, weight=50.0)
+                mixer=mixer
                 kpts=(12, 12, 12),  # k-point grid
                 txt='out.txt')  # name of GPAW output text file
 al.set_calculator(calc)
