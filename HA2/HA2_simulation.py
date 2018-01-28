@@ -29,7 +29,7 @@ for energy in E_cut:
 al.set_calculator(calc)
 cell_0 = al.cell
 for eps in np.linspace(-0.02,	0.02,	N_lattice_spacings):
-    al.cell = (1 + eps) * cell0
+    al.cell = (1 + eps) * cell_0
     al.get_potential_energy()
 
 
