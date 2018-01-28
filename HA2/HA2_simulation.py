@@ -23,4 +23,4 @@ al.set_calculator(calc)
 cell_0 = al.cell
 for eps in np.linspace(-0.02,	0.02,	7):
     al.cell = (1 + eps) * cell0
-    al.get_poten9al_energy()
+    al.get_potential_energy()
