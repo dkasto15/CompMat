@@ -1,7 +1,8 @@
 
 #!/usr/bin/env python
 # # imports # #
-from gpaw import GPAW, Mixer
+import numpy as np
+from gpaw import GPAW, Mixer, PW
 from ase.build import bulk
 from ase.io import read
 from ase.units import kJ
@@ -21,7 +22,7 @@ for energy in E_cut:
     calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
-                mixer=mixer
+                mixer=mixer,
                 kpts=(12, 12, 12),  # k-point grid
                 txt='out.txt')  # name of GPAW output text file
 

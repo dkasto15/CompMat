@@ -6,9 +6,9 @@
  |___|_|             
 
 User:   David@Davids-MacBook-Pro.local
-Date:   Thu Jan 25 13:11:10 2018
+Date:   Sun Jan 28 14:12:35 2018
 Arch:   x86_64
-Pid:    7666
+Pid:    14230
 Python: 3.6.1
 gpaw:   /Users/David/anaconda/lib/python3.6/site-packages/gpaw
 _gpaw:  /Users/David/anaconda/lib/python3.6/site-packages/
@@ -20,14 +20,16 @@ units:  Angstrom and eV
 cores:  1
 
 Input parameters:
-  basis: dzp
   h: 0.18
   kpts: [12 12 12]
-  mode: lcao
+  mixer: {backend: pulay,
+          beta: 0.1,
+          method: separate,
+          nmaxold: 5,
+          weight: 50.0}
+  mode: {ecut: 800.0,
+         name: pw}
   xc: PBE
 
-System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms 
-
-Initialize ...
-
-Date: Thu Jan 25 13:11:11 2018
+Memory usage: 39.34 MiB
+Date: Sun Jan 28 14:12:35 2018
