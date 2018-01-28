@@ -18,7 +18,7 @@ mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)
 N_lattice_spacings = 7
 E_al = 84.67567  # ionization energy for hardest bound core electron
 E_cut = [50, E_al, 100, 200, 300, 400, 500, 600, 700, 800]  # cut-off energy
-for energy in E_cut:
+for energy in [500]:
     calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
