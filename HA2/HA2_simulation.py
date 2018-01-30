@@ -18,6 +18,7 @@ mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)
 N_lattice_spacings = 7
 E_al = 84.67567  # ionization energy for hardest bound core electron
 E_cut = [50, E_al, 100, 200, 300, 400, 500, 600, 700, 800]  # cut-off energy
+
 for energy in [500]:
     calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
@@ -33,7 +34,7 @@ for eps in np.linspace(-0.02,	0.02,	N_lattice_spacings):
     al.get_potential_energy()
 
 
-conﬁgs = read('out.txt@0:' + str(N_lattice_spacings))  # read 7 conﬁgurations
+conﬁgs = read('out.txt@:' + str(N_lattice_spacings))  # read 7 conﬁgurations
 
 # Extract volumes and energies:
 volumes = [atoms.get_volume() for atoms in conﬁgs]
@@ -71,5 +72,6 @@ al_construction = wulff_construction('Al',
                                      structure='fcc',
                                      rounding='below')  # Vad gör denna?
 al_construction.center(vacuum=10)
+
 
 view(atoms)
