@@ -47,5 +47,6 @@ atoms = wulff_construction('Al',
                            size=10000,
                            structure='fcc',
                            rounding='below')  # Vad gör denna?
+                           rounding='below')  # What does this one do?
 atoms.center(vacuum=10)
 view(atoms)

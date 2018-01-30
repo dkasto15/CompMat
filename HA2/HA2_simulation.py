@@ -1,5 +1,5 @@
-
 #!/usr/bin/env python
+
 # # imports # #
 import numpy as np
 from gpaw import GPAW, Mixer, PW
@@ -32,6 +32,7 @@ cell_0 = al.cell
 for eps in np.linspace(-0.02,	0.02,	N_lattice_spacings):
     al.cell = (1 + eps) * cell_0
     al.get_potential_energy()
+<<<<<<< HEAD
 
 
 conﬁgs = read('out.txt@:' + str(N_lattice_spacings))  # read 7 conﬁgurations
@@ -96,3 +97,6 @@ al_construction_adsorbate = wulff_construction('Al',
 al_construction_adsorbate(vacuum=10)
 
 view(al_construction_adsorbate)
+=======
+    print al.get_potential_energy()
+>>>>>>> 4455cd8a5ce41bb446d8c426a901089040156ea6
