@@ -5,7 +5,12 @@ from ase.utils.eos import EquationOfState
 from ase.build import fcc111, fcc100
 from ase.cluster.wulff import wulff_construction
 from ase.visualize import view
+<<<<<<< HEAD
 import matplotlib.pyplot as plt
+=======
+
+# conﬁgs = read('out.txt@:' + str(N_lattice_spacings))  # read 7 conﬁgurations
+>>>>>>> 4455cd8a5ce41bb446d8c426a901089040156ea6
 conﬁgs = read('HA2/out.txt@0:7')  # read 7 conﬁgurations
 
 # Extract volumes and energies:
@@ -46,7 +51,6 @@ atoms = wulff_construction('Al',
                            energies=[sigma100, sigma111],
                            size=10000,
                            structure='fcc',
-                           rounding='below')  # Vad gör denna?
                            rounding='below')  # What does this one do?
 atoms.center(vacuum=10)
 view(atoms)
