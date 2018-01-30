@@ -7,7 +7,7 @@ from ase.build import bulk
 from ase.io import read
 from ase.units import kJ
 from ase.utils.eos import EquationOfState
-from ase.build import fcc111, fcc100
+from ase.build import fcc111, fcc100, add_adsorbate
 from ase.cluster.wulff import wulff_construction
 from ase.visualize import view
 
@@ -42,7 +42,6 @@ energies = [atoms.get_potential_energy() for atoms in conﬁgs]
 eos = EquationOfState(volumes, energies)
 v0, E_bulk, B = eos.ﬁt()
 eos.plot('Al_eos.png')
-
 a_calc = (4 * v0)**(1 / 3.0)  # Is this correct?
 
 N_x = 2
@@ -73,5 +72,27 @@ al_construction = wulff_construction('Al',
                                      rounding='below')  # Vad gör denna?
 al_construction.center(vacuum=10)
 
+view(al_construction)
 
-view(atoms)
+
+add_adsorbate(slab=surface100, adsorbate='CO', height=4.5, position='ontop')
+add_adsorbate(slab=surface111, adsorbate='CO', height=4.5, position='ontop')
+
+cell111 = surface111.get_cell()
+area111 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma111 = (1 / (2 * area111)) * (surface111.get_potential_energy() - N_x * N_y * E_bulk)
+
+cell100 = surface111.get_cell()
+area100 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma100 = (1 / (2 * area100)) * (surface100.get_potential_energy() - N_x * N_y * E_bulk)
+
+al_construction_adsorbate = wulff_construction('Al',
+                                               surfaces=[(1, 0, 0),
+                                                         (1, 1, 1)],
+                                               energies=[sigma100, sigma111],
+                                               size=10000,
+                                               structure='fcc',
+                                               rounding='below')  # Vad gör denna?
+al_construction_adsorbate(vacuum=10)
+
+view(al_construction_adsorbate)
