@@ -1,3 +1,4 @@
+
 from ase.io import read
 from ase.units import kJ
 from ase.utils.eos import EquationOfState
@@ -5,12 +6,13 @@ from ase.build import fcc111, fcc100
 from ase.cluster.wulff import wulff_construction
 from ase.visualize import view
 
-conﬁgs = read('out.txt@0:7')  # read 7 conﬁgurations
+conﬁgs = read('HA2/out.txt@0:7')  # read 7 conﬁgurations
 
 # Extract volumes and energies:
 volumes = [atoms.get_volume() for atoms in conﬁgs]
 energies = [atoms.get_potential_energy() for atoms in conﬁgs]
 eos = EquationOfState(volumes, energies)
+print('sada')
 v0, E_bulk, B = eos.ﬁt()
 eos.plot('Al_eos.png')
 
