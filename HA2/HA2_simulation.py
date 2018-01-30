@@ -33,7 +33,7 @@ for eps in np.linspace(-0.02,	0.02,	N_lattice_spacings):
     al.get_potential_energy()
 
 
-conﬁgs = read('out.txt@0:' + str(len(N_lattice_spacings)))  # read 7 conﬁgurations
+conﬁgs = read('out.txt@0:' + str(N_lattice_spacings))  # read 7 conﬁgurations
 
 # Extract volumes and energies:
 volumes = [atoms.get_volume() for atoms in conﬁgs]
