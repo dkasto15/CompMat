@@ -92,12 +92,24 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
+<<<<<<< HEAD
     CO = Atoms('CO', vacuum=10)  # Create CO molecule object
 
+=======
+<<<<<<< HEAD
+    CO = Atoms('CO') # Create CO molecule object
+    add_adsorbate(slab=surface111, adsorbate=CO, height=1.8, position='ontop')
+    add_adsorbate(slab=surface100, adsorbate=CO, height=1.8, position='ontop')
+    # height above based on values for CO in ASE doc. Future: We could also
+    # perform equilibrium scan by looping over various heights
+=======
+    CO = Atoms('CO')  # Create CO molecule object
+>>>>>>> 75d0ad09d237c2a158351055efb9bc0fa742d65c
     add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
     # height above based on values in ASE doc. Future: We could also perform equilibrium
     # scan by looping over various heights
+>>>>>>> 0faa48b41c367e45fb57501d73e03cc06af464f8
 
     CO.set_cell([10, 10, 10])
     CO.set_calculator(calc)
