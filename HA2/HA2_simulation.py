@@ -50,9 +50,10 @@ for energy in [500]:
     eos.plot('Al_eos.png')
     a_calc = (4 * v0)**(1 / 3.0)  # Is this correct?
 
-    N_x = 2
-    N_y = 2
+    N_x = 1
+    N_y = 1
     N_z = 10
+
     surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface111.center(axis=2)
@@ -86,12 +87,14 @@ for energy in [500]:
     # # # Add adsorbate # # #
     d_CO = 1.128  # CO bondlength in [Å]
     CO = Atoms('CO', [(0, 0, 0), (0, 0, d_CO)])
+    CO
     add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
 
     cell111 = surface111.get_cell()
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
     surfEn111 = surface111.get_potential_energy()
+
     cell100 = surface100.get_cell()
     area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
     surfEn100 = surface100.get_potential_energy()
