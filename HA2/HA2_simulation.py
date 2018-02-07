@@ -76,10 +76,10 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     cell111 = surface111.get_cell()  # Unit cell object of the Al FCC 111
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))  # Calc. surface area
-    surfEn111 = surface111.get_potential_energy()  # Calc pot. energy of FCC 111
+    surfEn111 = surface111.get_potential_energy()  # Calc. pot. energy of FCC 111
     cell100 = surface100.get_cell()  # Unit cell object of the Al FCC 100
     area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))  # Calc. surface area
-    surfEn100 = surface100.get_potential_energy()  # Calc pot. energy of FCC 100
+    surfEn100 = surface100.get_potential_energy()  # Calc. pot. energy of FCC 100
 
     # Calc. surf. energy per area (sigma) for FCC 111 and 100
     sigma111 = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
@@ -92,35 +92,30 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
-<<<<<<< HEAD
     CO = Atoms('CO') # Create CO molecule object
     add_adsorbate(slab=surface111, adsorbate=CO, height=1.8, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=1.8, position='ontop')
     # height above based on values for CO in ASE doc. Future: We could also
     # perform equilibrium scan by looping over various heights
-=======
-    CO = Atoms('CO')  # Create CO molecule object
-    add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
-    add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
-    # height above based on values in ASE doc. Future: We could also perform equilibrium
-    # scan by looping over various heights
->>>>>>> 0faa48b41c367e45fb57501d73e03cc06af464f8
 
-    cell111 = surface111.get_cell()
-    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
-    surfEn111 = surface111.get_potential_energy()
 
-    cell100 = surface100.get_cell()
-    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
-    surfEn100 = surface100.get_potential_energy()
+    cell111 = surface111.get_cell() # Unit cell object of the Al FCC 111
+    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1])) # Calc. surface area
+    surfEn111 = surface111.get_potential_energy() # Calc. pot. energy of FCC 111
+    cell100 = surface100.get_cell() # Unit cell object of the Al FCC 100
+    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1])) # Calc. surface area
+    surfEn100 = surface100.get_potential_energy() # Calc. pot. energy of FCC 100
 
+    # Calc. surf. energy per area (sigma) for FCC 111 and 100 with CO adsorbate
     sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
+    # Save sigmas for 111 and 100 with CO adsorbate to file
     file = open('sigmas_ads.txt', 'w')
     file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
     file.close()
 
-    if rank == 0:
-        a = 0
-        print area111, surfEn111, E_bulk, sigma111
+    # Print interesting parameters
+    # if rank == 0:
+    #     a = 0
+    #     print area111, surfEn111, E_bulk, sigma111
