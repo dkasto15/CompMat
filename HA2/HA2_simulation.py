@@ -64,7 +64,8 @@ for energy in [500]: # Change to E_cut to loop and check convergence
     surface111.center(axis=2)
     surface100.center(axis=2)
 
-    # Initialize new calculator 
+    # Initialize new calculator that only considers k-space in xy-plane,
+    # since we're only looking at the surface
     calc2 = GPAW(mode=PW(energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
@@ -75,25 +76,30 @@ for energy in [500]: # Change to E_cut to loop and check convergence
     surface111.set_calculator(calc2)
     surface100.set_calculator(calc2)
 
-    cell111 = surface111.get_cell()
-    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
-    surfEn111 = surface111.get_potential_energy()
-    cell100 = surface100.get_cell()
-    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
-    surfEn100 = surface100.get_potential_energy()
+    cell111 = surface111.get_cell() # Unit cell object of the Al FCC 111
+    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1])) # Calc. surface area
+    surfEn111 = surface111.get_potential_energy() # Calc pot. energy of FCC 111
+    cell100 = surface100.get_cell() # Unit cell object of the Al FCC 100
+    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1])) # Calc. surface area
+    surfEn100 = surface100.get_potential_energy() # Calc pot. energy of FCC 100
 
+    # Calc. surf. energy per area (sigma) for FCC 111 and 100
     sigma111 = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100 = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
+    # Save sigmas for 111 and 100 to file
     file = open('sigmas.txt','w')
     file.write(str(sigma111)+'\t'+str(sigma100))
     file.close()
 
-    # # # Add adsorbate # # #
+    # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
-    CO = Atoms('CO', [(0, 0, 0), (0, 0, d_CO)])
+    CO = Atoms('CO') # Create CO molecule object
     add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
+    # height above based on values in ASE doc. Future: We could also perform equilibrium
+    # scan by looping over various heights
+
 
     cell111 = surface111.get_cell()
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
