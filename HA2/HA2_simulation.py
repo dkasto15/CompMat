@@ -50,10 +50,16 @@ for energy in [500]:
     eos.plot('Al_eos.png')
     a_calc = (4 * v0)**(1 / 3.0) # Why is this correct?
 
+<<<<<<< HEAD
     N_x = 1
     N_y = 1
     N_z = 3
 
+=======
+    N_x = 2
+    N_y = 2
+    N_z = 10
+>>>>>>> 12248824f33037b0e270797f367ffa37d11ede25
     surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface111.center(axis=2)
