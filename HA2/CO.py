@@ -1,7 +1,7 @@
 
 #from ase.io import read
 import numpy as np
-from gpaw import GPAW, Mixer, PW
+#from gpaw import GPAW, Mixer, PW
 from ase.build import *
 from ase.io import read
 from ase.units import kJ, J, m
@@ -12,9 +12,9 @@ from ase.visualize import view
 from ase.parallel import rank
 from ase import Atoms
 
-N_x = 1
-N_y = 1
-N_z = 3
+N_x = 2
+N_y = 2
+N_z = 20
 
 a_al = 4.05
 
@@ -22,8 +22,10 @@ surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_al, vacuum=7.5)
 surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_al, vacuum=7.5)
 surface111.center(axis=2)
 surface100.center(axis=2)
+CO = Atoms('CO')
+add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
 
-view(surface100)
+# view(surface100)
 view(surface111)
 
 # Al = wulff_construction('Al',

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 # # imports # #
 import numpy as np
@@ -36,7 +36,7 @@ for energy in [500]:
     cell_0 = al.cell
     for eps in np.linspace(-0.02, 0.02,	N_lattice_spacings):
         al.cell = (1 + eps) * cell_0
-        al.get_potential_energy() #ghj
+        al.get_potential_energy()  # ghj
 
     confs = read('out.txt@0:7')  # read 7 conﬁgurations
 
@@ -48,7 +48,7 @@ for energy in [500]:
     eos = EquationOfState(volumes, energies)
     v0, E_bulk, B = eos.fit()
     eos.plot('Al_eos.png')
-    a_calc = (4 * v0)**(1 / 3.0) # Is this correct?
+    a_calc = (4 * v0)**(1 / 3.0)  # Is this correct?
 
     N_x = 1
     N_y = 1
@@ -60,11 +60,11 @@ for energy in [500]:
     surface100.center(axis=2)
 
     calc2 = GPAW(mode=PW(energy),  # use the LCAO basis mode
-                h=0.18,  # grid spacing
-                xc='PBE',  # XC-functional
-                mixer=mixer,
-                kpts=(12, 12, 1),  # k-point grid
-                txt='out2.txt')  # name of GPAW output text file
+                 h=0.18,  # grid spacing
+                 xc='PBE',  # XC-functional
+                 mixer=mixer,
+                 kpts=(12, 12, 1),  # k-point grid
+                 txt='out2.txt')  # name of GPAW output text file
 
     surface111.set_calculator(calc2)
     surface100.set_calculator(calc2)
@@ -72,6 +72,7 @@ for energy in [500]:
     cell111 = surface111.get_cell()
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
     surfEn111 = surface111.get_potential_energy()
+
     cell100 = surface100.get_cell()
     area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
     surfEn100 = surface100.get_potential_energy()
@@ -79,8 +80,8 @@ for energy in [500]:
     sigma111 = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100 = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
-    file = open('sigmas.txt','w')
-    file.write(str(sigma111)+'\t'+str(sigma100))
+    file = open('sigmas.txt', 'w')
+    file.write(str(sigma111) + '\t' + str(sigma100))
     file.close()
 
     # # # Add adsorbate # # #
@@ -99,8 +100,8 @@ for energy in [500]:
     sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
-    file = open('sigmas_ads.txt','w')
-    file.write(str(sigma111_ads)+'\t'+str(sigma100_ads))
+    file = open('sigmas_ads.txt', 'w')
+    file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
     file.close()
 
     if rank == 0:
