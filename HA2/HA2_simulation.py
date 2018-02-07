@@ -53,7 +53,6 @@ for energy in [500]:
     N_x = 2
     N_y = 2
     N_z = 10
-
     surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface111.center(axis=2)
