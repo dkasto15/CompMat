@@ -92,11 +92,17 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
-    CO = Atoms('CO')  # Create CO molecule object
+    CO = Atoms('CO', vacuum=10)  # Create CO molecule object
+
     add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
     # height above based on values in ASE doc. Future: We could also perform equilibrium
     # scan by looping over various heights
+
+    CO.set_cell([10, 10, 10])
+    CO.set_calculator(calc)
+
+    energy_CO = CO.get_potential_energy()
 
     cell111 = surface111.get_cell()
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
@@ -108,6 +114,10 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
+
+    file = open('sigmas_ads.txt', 'w')
+    file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
+    file.close()
 
     file = open('sigmas_ads.txt', 'w')
     file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
