@@ -25,6 +25,7 @@ surface100.center(axis=2)
 CO = Atoms('CO')
 add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
 
+
 # view(surface100)
 view(surface111)
 
