@@ -1,0 +1,51 @@
+# sigma111 = (1 / (2.0 * area111)) * (surface111.get_potential_energy() - N_x * N_y * E_bulk)
+#
+# cell100 = surface111.get_cell()
+# area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
+# sigma100 = (1 / (2 * area100)) * (surface100.get_potential_energy() - N_x * N_y * E_bulk)
+
+cell111 = surface111.get_cell()
+area111 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma111 = (1 / (2 * area111)) * (surface111.get_potential_energy() - N_x * N_y * E_bulk)
+
+cell100 = surface111.get_cell()
+area100 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma100 = (1 / (2 * area100)) * (surface100.get_potential_energy() - N_x * N_y * E_bulk)
+
+
+al_construction = wulff_construction('Al',
+                                     surfaces=[(1, 0, 0),
+                                               (1, 1, 1)],
+                                     energies=[sigma100, sigma111],
+                                     size=10000,
+                                     structure='fcc',
+                                     rounding='below')  # Vad gör denna?
+al_construction.center(vacuum=10)
+
+view(al_construction)
+
+
+add_adsorbate(slab=surface100, adsorbate='CO', height=4.5, position='ontop')
+add_adsorbate(slab=surface111, adsorbate='CO', height=4.5, position='ontop')
+
+cell111 = surface111.get_cell()
+area111 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma111 = (1 / (2 * area111)) * (surface111.get_potential_energy() - N_x * N_y * E_bulk)
+
+cell100 = surface111.get_cell()
+area100 = np.linalg.norm(np.cross(cell[0], cell[1]))
+sigma100 = (1 / (2 * area100)) * (surface100.get_potential_energy() - N_x * N_y * E_bulk)
+
+al_construction_adsorbate = wulff_construction('Al',
+                                               surfaces=[(1, 0, 0),
+                                                         (1, 1, 1)],
+                                               energies=[sigma100, sigma111],
+                                               size=10000,
+                                               structure='fcc',
+                                               rounding='below')  # Vad gör denna?
+al_construction_adsorbate(vacuum=10)
+
+view(al_construction_adsorbate)
+=======
+    print al.get_potential_energy()
+>>>>>>> 4455cd8a5ce41bb446d8c426a901089040156ea6
