@@ -12,6 +12,8 @@ from ase.build import fcc111, fcc100, add_adsorbate
 from ase.cluster.wulff import wulff_construction
 from ase.visualize import view
 from ase.parallel import rank
+from ase import Atoms
+
 #from ase.lattice.surface import *
 
 a_al = 4.05
@@ -79,6 +81,26 @@ for energy in [500]:
 
     file = open('sigmas.txt','w')
     file.write(str(sigma111)+'\t'+str(sigma100))
+    file.close()
+
+    # # # Add adsorbate # # #
+    d_CO = 1.128  # CO bondlength in [Å]
+    CO = Atoms('CO', [(0, 0, 0), (0, 0, d_CO)])
+    add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
+    add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
+
+    cell111 = surface111.get_cell()
+    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
+    surfEn111 = surface111.get_potential_energy()
+    cell100 = surface100.get_cell()
+    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
+    surfEn100 = surface100.get_potential_energy()
+
+    sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
+    sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
+
+    file = open('sigmas_ads.txt','w')
+    file.write(str(sigma111_ads)+'\t'+str(sigma100_ads))
     file.close()
 
     if rank == 0:
