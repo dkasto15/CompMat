@@ -18,6 +18,7 @@ from ase import Atoms
 a_al = 4.05  # Lattice constant for Al, experimentally determined
 N_lattice_spacings = 7  # Number of lattice constants to loop over to find equilibrium
 E_al = 84.67567  # Ionization energy for hardest bound core electron
+theta = 1 / 4.0  # Monolayer coverage
 
 # # # Create Al bulk and initialize calculator parameters # # #
 al = bulk('Al', 'fcc', a=a_al, cubic=False)  # Create Al bulk
@@ -55,7 +56,7 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     N_x = 1
     N_y = 1
-    N_z = 10
+    N_z = 6
 
     surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
@@ -85,53 +86,32 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
     sigma111 = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100 = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
-    # Save sigmas for 111 and 100 to file
-    file = open('sigmas.txt', 'w')
-    file.write(str(sigma111) + '\t' + str(sigma100))
-    file.close()
-
     # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
-<<<<<<< HEAD
-    CO = Atoms('CO', vacuum=10)  # Create CO molecule object
 
-=======
-<<<<<<< HEAD
-    CO = Atoms('CO') # Create CO molecule object
-    add_adsorbate(slab=surface111, adsorbate=CO, height=1.8, position='ontop')
-    add_adsorbate(slab=surface100, adsorbate=CO, height=1.8, position='ontop')
-    # height above based on values for CO in ASE doc. Future: We could also
-    # perform equilibrium scan by looping over various heights
-=======
     CO = Atoms('CO')  # Create CO molecule object
->>>>>>> 75d0ad09d237c2a158351055efb9bc0fa742d65c
     add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
     add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
-    # height above based on values in ASE doc. Future: We could also perform equilibrium
-    # scan by looping over various heights
->>>>>>> 0faa48b41c367e45fb57501d73e03cc06af464f8
+    # height above based on values for CO in ASE doc. Future: We could also
+    # perform equilibrium scan by looping over various heights
 
     CO.set_cell([10, 10, 10])
+    CO.center()
     CO.set_calculator(calc)
 
     energy_CO = CO.get_potential_energy()
 
-    cell111 = surface111.get_cell()
-    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))
-    surfEn111 = surface111.get_potential_energy()
+    surfEn111_ads = surface111.get_potential_energy()
+    surfEn100_ads = surface100.get_potential_energy()
 
-    cell100 = surface100.get_cell()
-    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))
-    surfEn100 = surface100.get_potential_energy()
+    sigma100_ads = sigma100 + theta * (surfEn100_ads - surfEn100 - energy_CO) / area100
+    sigma111_ads = sigma111 + theta * (surfEn111_ads - surfEn111 - energy_CO) / area111
 
-    sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
-    sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
-
-    file = open('sigmas_ads.txt', 'w')
-    file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
+    file = open('sigma_Al.txt', 'w')
+    file.write(str(sigma111) + '\t' + str(sigma100))
     file.close()
 
-    file = open('sigmas_ads.txt', 'w')
+    file = open('sigma_ads.txt', 'w')
     file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
     file.close()
 
