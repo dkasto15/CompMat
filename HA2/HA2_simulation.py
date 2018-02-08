@@ -18,6 +18,7 @@ from ase import Atoms
 a_al = 4.05  # Lattice constant for Al, experimentally determined
 N_lattice_spacings = 7  # Number of lattice constants to loop over to find equilibrium
 E_al = 84.67567  # Ionization energy for hardest bound core electron
+theta = 1 / 4.0  # Monolayer coverage
 
 # # # Create Al bulk and initialize calculator parameters # # #
 al = bulk('Al', 'fcc', a=a_al, cubic=False)  # Create Al bulk
@@ -55,7 +56,7 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     N_x = 1
     N_y = 1
-    N_z = 10
+    N_z = 6
 
     surface111 = fcc111('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
     surface100 = fcc100('Al', size=(N_x, N_y, N_z), a=a_calc, vacuum=7.5)
@@ -76,46 +77,44 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
 
     cell111 = surface111.get_cell()  # Unit cell object of the Al FCC 111
     area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))  # Calc. surface area
-    surfEn111 = surface111.get_potential_energy()  # Calc. pot. energy of FCC 111
+    surfEn111 = surface111.get_potential_energy()  # Calc pot. energy of FCC 111
     cell100 = surface100.get_cell()  # Unit cell object of the Al FCC 100
     area100 = np.linalg.norm(np.cross(cell100[0], cell100[1]))  # Calc. surface area
-    surfEn100 = surface100.get_potential_energy()  # Calc. pot. energy of FCC 100
+    surfEn100 = surface100.get_potential_energy()  # Calc pot. energy of FCC 100
 
     # Calc. surf. energy per area (sigma) for FCC 111 and 100
     sigma111 = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
     sigma100 = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
 
-    # Save sigmas for 111 and 100 to file
-    file = open('sigmas.txt', 'w')
-    file.write(str(sigma111) + '\t' + str(sigma100))
-    file.close()
-
     # # # Add CO adsorbate to Al surface # # #
     d_CO = 1.128  # CO bondlength in [Å]
-    CO = Atoms('CO') # Create CO molecule object
-    add_adsorbate(slab=surface111, adsorbate=CO, height=1.8, position='ontop')
-    add_adsorbate(slab=surface100, adsorbate=CO, height=1.8, position='ontop')
+
+    CO = Atoms('CO')  # Create CO molecule object
+    add_adsorbate(slab=surface111, adsorbate=CO, height=4.5, position='ontop')
+    add_adsorbate(slab=surface100, adsorbate=CO, height=4.5, position='ontop')
     # height above based on values for CO in ASE doc. Future: We could also
     # perform equilibrium scan by looping over various heights
 
+    CO.set_cell([10, 10, 10])
+    CO.center()
+    CO.set_calculator(calc)
 
-    cell111 = surface111.get_cell() # Unit cell object of the Al FCC 111
-    area111 = np.linalg.norm(np.cross(cell111[0], cell111[1])) # Calc. surface area
-    surfEn111 = surface111.get_potential_energy() # Calc. pot. energy of FCC 111
-    cell100 = surface100.get_cell() # Unit cell object of the Al FCC 100
-    area100 = np.linalg.norm(np.cross(cell100[0], cell100[1])) # Calc. surface area
-    surfEn100 = surface100.get_potential_energy() # Calc. pot. energy of FCC 100
+    energy_CO = CO.get_potential_energy()
 
-    # Calc. surf. energy per area (sigma) for FCC 111 and 100 with CO adsorbate
-    sigma111_ads = (1 / (2.0 * area111)) * (surfEn111 - N_x * N_y * E_bulk)
-    sigma100_ads = (1 / (2.0 * area100)) * (surfEn100 - N_x * N_y * E_bulk)
+    surfEn111_ads = surface111.get_potential_energy()
+    surfEn100_ads = surface100.get_potential_energy()
 
-    # Save sigmas for 111 and 100 with CO adsorbate to file
-    file = open('sigmas_ads.txt', 'w')
+    sigma100_ads = sigma100 + theta * (surfEn100_ads - surfEn100 - energy_CO) / area100
+    sigma111_ads = sigma111sw + theta * (surfEn111_ads - surfEn111 - energy_CO) / area111
+
+    file = open('sigma_Al.txt', 'w')
+    file.write(str(sigma111) + '\t' + str(sigma100))
+    file.close()
+
+    file = open('sigma_ads.txt', 'w')
     file.write(str(sigma111_ads) + '\t' + str(sigma100_ads))
     file.close()
 
-    # Print interesting parameters
-    # if rank == 0:
-    #     a = 0
-    #     print area111, surfEn111, E_bulk, sigma111
+    if rank == 0:
+        a = 0
+        print area111, surfEn111, E_bulk, sigma111
