@@ -7,32 +7,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # input files
-filename1 = 'sigmas.txt'
-filename2 = 'sigmas_ads.txt'
+filename1 = 'sigma_Al.txt'
+filename2 = 'sigma_ads.txt'
 
 # import and manage data
-sigmas = np.array(np.loadtxt(filename1))
-sigma111 = sigmas[0]
-sigma100 = sigmas[1]
+sigma_Al = np.array(np.loadtxt(filename1))
+sigma111_Al = sigma_Al[0]
+sigma100_Al = sigma_Al[1]
 sigmas_ads = np.array(np.loadtxt(filename2))
 sigma111_ads = sigmas_ads[0]
 sigma100_ads = sigmas_ads[1]
-theta = 1 / 4  # Monolayer coverage
-print(sigma111, sigma100)
-print(sigma111_ads, sigma100_ads)
 
 Al = wulff_construction('Al',
                         surfaces=[(1, 0, 0),
                                   (1, 1, 1)],
-                        energies=[sigma100, sigma111],
+                        energies=[sigma100_Al, sigma111_Al],
                         size=10000,
                         structure='fcc',
                         rounding='below')  # What does this one do?
 Al.center(vacuum=10)
 view(Al)
-
-sigma100_ads = sigma100 + theta * sigma100_ads
-sigma111_ads = sigma111 + theta * sigma111_ads
 
 Al_ads = wulff_construction('Al',
                             surfaces=[(1, 0, 0),

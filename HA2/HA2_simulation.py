@@ -105,7 +105,7 @@ for energy in [500]:  # Change to E_cut to loop and check convergence
     surfEn100_ads = surface100.get_potential_energy()
 
     sigma100_ads = sigma100 + theta * (surfEn100_ads - surfEn100 - energy_CO) / area100
-    sigma111_ads = sigma111 + theta * (surfEn111_ads - surfEn111 - energy_CO) / area111
+    sigma111_ads = sigma111sw + theta * (surfEn111_ads - surfEn111 - energy_CO) / area111
 
     file = open('sigma_Al.txt', 'w')
     file.write(str(sigma111) + '\t' + str(sigma100))
