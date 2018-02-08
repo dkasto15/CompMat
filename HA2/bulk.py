@@ -3,7 +3,7 @@
 
 # # # imports # # #
 import numpy as np
-#from gpaw import GPAW, Mixer, PW
+from gpaw import GPAW, Mixer, PW
 from ase.build import *
 from ase.io import read
 from ase.units import kJ, J, m
