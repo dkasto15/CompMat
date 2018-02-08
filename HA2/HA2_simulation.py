@@ -23,7 +23,9 @@ theta = 1 / 4.0  # Monolayer coverage
 # # # Create Al bulk and initialize calculator parameters # # #
 al = bulk('Al', 'fcc', a=a_al, cubic=False)  # Create Al bulk
 mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
-E_cut = [50, E_al, 100, 200, 300, 400, 500]  # cut-off energy
+
+
+E_cut = [50, E_al, 100, 200, 300, 400, 500]  # cut-off energy - coarse loop
 
 for energy in [500]:  # Change to E_cut to loop and check convergence
     calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
