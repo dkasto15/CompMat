@@ -50,39 +50,40 @@ except Exception as e:
 
 for energy in E_cut:
     for k in k_points:
-    calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
-                h=0.18,  # grid spacing, recommended value in this course
-                xc='PBE',  # Exchange-correlation functional
-                mixer=mixer,
-                kpts=(k, k, k),  # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
-                txt='out.txt')  # name of GPAW output text file
-    if loop_lattice_param:
-        # # # Find lattice constant with lowest energy # # #
-        cell_0 = al.cell  # Unit cell object of the Al bulk
-        for eps in np.linspace(-0.02, 0.02,	N_lattice_spacings):
-            al.cell = (1 + eps) * cell_0  # Adjust lattice constant of unit cell
-            # Calculate the potential energy for the Al bulk
-            energies.append(al.get_potential_energy())
-            volumes.append(al.get_volume())
+        calc = GPAW(mode=PW(energy),  # use the LCAO basis mode
+                    h=0.18,  # grid spacing, recommended value in this course
+                    xc='PBE',  # Exchange-correlation functional
+                    mixer=mixer,
+                    kpts=(k, k, k),  # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
+                    txt='out.txt')  # name of GPAW output text file
+        if loop_lattice_param:
+            # # # Find lattice constant with lowest energy # # #
+            cell_0 = al.cell  # Unit cell object of the Al bulk
+            for eps in np.linspace(-0.02, 0.02,	N_lattice_spacings):
+                al.cell = (1 + eps) * cell_0  # Adjust lattice constant of unit cell
+                # Calculate the potential energy for the Al bulk
+                energies.append(al.get_potential_energy())
+                volumes.append(al.get_volume())
 
-        #
-        # confs = read('out.txt@0:' + str(N_lattice_spacings))  # Read the conﬁgurations
-        # # Extract volumes and energies:
-        # volumes = [atoms.get_volume() for atoms in confs]
-        # energies = [atoms.get_potential_energy() for atoms in confs]
-        # # if rank == 0:
-        # #     print energies, shape(energies)
-        #
-        if rank == 0:
-            print 'Energies: ' + str(energies)
-            print 'Volumes: ' + str(volumes)
-            # Plot energies as a function of unit cell volume (directly related to latt. const.)
-            eos = EquationOfState(volumes, energies)
-            v0, E_bulk, B = eos.fit()
-            eos.plot('Al_eos.png')
-            a_calc = (4 * v0)**(1 / 3.0)  # Latt. const. acc. to ASE doc., but why is this correct?
+            #
+            # confs = read('out.txt@0:' + str(N_lattice_spacings))  # Read the conﬁgurations
+            # # Extract volumes and energies:
+            # volumes = [atoms.get_volume() for atoms in confs]
+            # energies = [atoms.get_potential_energy() for atoms in confs]
+            # # if rank == 0:
+            # #     print energies, shape(energies)
+            #
+            if rank == 0:
+                print 'Energies: ' + str(energies)
+                print 'Volumes: ' + str(volumes)
+                # Plot energies as a function of unit cell volume (directly related to latt. const.)
+                eos = EquationOfState(volumes, energies)
+                v0, E_bulk, B = eos.fit()
+                eos.plot('Al_eos.png')
+                # Latt. const. acc. to ASE doc., but why is this correct?
+                a_calc = (4 * v0)**(1 / 3.0)
 
-            print 'a_calc: ' + str(a_calc)
+                print 'a_calc: ' + str(a_calc)
 
-    else:
-        al.get_potential_energy()
+        else:
+            al.get_potential_energy()
