@@ -1,13 +1,5 @@
 #!/bin/bash
 # chmod 755 copyFilesToHebbe
 
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/bulk.py \
-kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/CO.py \
-kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/surface_onlyAl.py \
-kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/surface_ads.py \
-kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/wulffConstruction.py \
+scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/*.py \
 kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
