@@ -56,6 +56,8 @@ for energy in E_cut:
                     mixer=mixer,
                     kpts=(k, k, k),  # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
                     txt='out.txt')  # name of GPAW output text file
+        al.set_calculator(calc)
+
         if loop_lattice_param:
             # # # Find lattice constant with lowest energy # # #
             cell_0 = al.cell  # Unit cell object of the Al bulk
