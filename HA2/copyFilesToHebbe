@@ -1,7 +1,7 @@
 #!/bin/bash
 # chmod 755 copyFilesToHebbe
 
-scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/bulk_onlyAl.py \
+scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/bulk.py \
 kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
 scp /Users/David/Google\ Drive/Skola/Chalmers/CompMat/HA2/CO.py \
 kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/
