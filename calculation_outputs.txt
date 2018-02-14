@@ -1,0 +1,2 @@
+Minimum energy: -0.49996743938609484
+Normalization: 0.9999999999999999
