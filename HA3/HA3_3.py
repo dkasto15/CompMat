@@ -70,8 +70,8 @@ def main():
     ax_potential.set_ylabel('Probability [a.u]')
     ax_potential.legend(loc=1)
 
-    plt.savefig('RadProb.eps')
-    plt.savefig('RadProb.png')
+    plt.savefig('HA3/RadProb.eps')
+    plt.savefig('HA3/RadProb.png')
     plt.show()
 
     ''' Write data to file '''

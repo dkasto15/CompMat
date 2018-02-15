@@ -64,7 +64,7 @@ def main():
     fig_1 = plt.figure()
     ax_potential = fig_1.add_subplot(111)
     ax_potential.plot(r_max_vec, eps_vec, label='Eigenvalues')
-    # ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
+    ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
     ax_potential.set_xlabel('Max. radius [atomic units]')
     ax_potential.set_ylabel('Converged value [a.u]')
     ax_potential.legend(loc=1)
