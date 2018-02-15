@@ -65,22 +65,17 @@ def main():
     ''' Plotting '''
     fig_1 = plt.figure()
     ax_potential = fig_1.add_subplot(111)
-    #ax_potential.plot(r_max_vec, eps_vec, label='Eigenvalues')
+    ax_potential.plot(r_max_vec, eps_vec, label='Eigenvalues')
     ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
-    ax_potential.set_xlabel('Max. radius [a.u.]')
-    ax_potential.set_ylabel('Converged energy value [a.u]')
-    ax_potential.set_title('Energy convergence when increasing maximum radius')
-    # ax_potential.legend(loc=2)
+    ax_potential.set_xlabel('Max. radius [atomic units]')
+    ax_potential.set_ylabel('Converged value [a.u]')
+    ax_potential.legend(loc=1)
     plt.savefig('eigAndEn.eps')
     plt.savefig('eigAndEn.png')
 
     fig_2 = plt.figure()
     ax_potential2 = fig_2.add_subplot(111)
-    ax_potential2.plot(r, 2 * 4 * np.pi * r**2 * phi_s_H**2, label='Eigenvalues')
-    ax_potential2.set_title('Electron densty for helium electons when the \n' +
-                            'maximum radius in simulation was ' + str(r_max) + ' a.u.')
-    ax_potential2.set_xlabel('Radius [a.u.]')
-    ax_potential2.set_ylabel('Electron densinsity [a.u.]')
+    ax_potential2.plot(r, 4 * np.pi * r**2 * phi_s_H**2, label='Eigenvalues')
 
     plt.show()
 
@@ -107,21 +102,6 @@ def compute_eps_and_phi(A, r):
     # corresponding to the lowest energy
     phi_s_H = phi_min / np.sqrt(np.trapz(phi_min**2, r))  # normalization
     return eps_min, phi_s_H
-
-
-def calc_Vxc(r):
-    n = (3 / 4 * np.pi * r**3)
-    drdn = -(1 / 3) * (3 / np.pi * 4)**(1 / 3) * n ** (-4 / 3)
-
-    ex = -(3 / 4) * (3 * n / np.pi)**(1 / 3)
-
-    dexdn = -(3 / 4) * (3 / np.pi)**(1 / 3) * n**(-1 / 3)
-
-    ec_more_one = gamma / (1 + beta1 * np.sqrt(r) + beta1 * r)
-    dec_more_onedr = -gamma * (beta1 / (2 * np.sqrt(r)) + beta2) / (beta1 * np.sqrt())
-    ec_less_one = A * np.log(r) + B + C * r * np.log(r) + D * r
-
-    # ex = -(3 / 4) * (3 * 3 / 4 * np.pi)*
 
 
 if __name__ == '__main__':
