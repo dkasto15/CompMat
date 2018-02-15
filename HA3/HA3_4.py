@@ -20,11 +20,11 @@ def main():
 
     for j in range(nbr_of_conv_loops):
         ''' Finite difference geometry (1D) '''
-        r_max = 5+j # Maximum radius of position grid in Hartree units
+        r_max = 5+3*j # Maximum radius of position grid in Hartree units
         r_min = 0 # Minimum radius of position grid in Hartree units
         r_max_vec[j] = r_max
         # n_r = 1000 # Number of elements in position grid
-        h = 0.005 # step size, based on that it was sufficient for task 2
+        h = 0.1 # step size, based on that it was sufficient for task 2
         r = np.arange(r_min, r_max, h) # constant step size
         # r = np.linspace(r_min, r_max, n_r+1) # Position grid in Hartree units
         r = r[1:] # Remove singularity in r=0
@@ -55,15 +55,16 @@ def main():
         V_xc = 0
         eps_xc = 0
         E_0 = 2*eps - 2*trapz(phi_s_H**(2)*(0.5*V_H + V_xc - eps_xc), r)
-        E_vec[j] = np.real(E_0) # "real" to suppress annoying complex warning 
+        E_vec[j] = np.real(E_0) # "real" to suppress annoying complex warning
         eps_vec[j] = eps
+        print('Done: r_max = ' + str(r_max))
         # phi_vec[j] = phi_s_H
 
     ''' Plotting '''
     fig_1 = plt.figure()
     ax_potential = fig_1.add_subplot(111)
     ax_potential.plot(r_max_vec, eps_vec, label='Eigenvalues')
-    ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
+    # ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
     ax_potential.set_xlabel('Max. radius [atomic units]')
     ax_potential.set_ylabel('Converged value [a.u]')
     ax_potential.legend(loc=1)
