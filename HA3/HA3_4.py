@@ -70,7 +70,12 @@ def main():
     ax_potential.legend(loc=1)
     plt.savefig('eigAndEn.eps')
     plt.savefig('eigAndEn.png')
-    # plt.show()
+
+    fig_2 = plt.figure()
+    ax_potential2 = fig_2.add_subplot(111)
+    ax_potential2.plot(r, phi_s_H, label='Eigenvalues')
+
+    plt.show()
 
     ''' Write data to file '''
     print(eps_vec)
