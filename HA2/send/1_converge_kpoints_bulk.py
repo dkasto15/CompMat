@@ -33,7 +33,7 @@ energies = []
 for n in n_k_points:
     if rank == 0:
         print 'Simulating ' + str(n) + 'kpoints...'
-    mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+
     calc = GPAW(mode=PW(energy_cutoff),  # use the LCAO basis mode
                 h=0.18,  # grid spacing, recommended value in this course
                 xc='PBE',  # Exchange-correlation functional

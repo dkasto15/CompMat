@@ -17,7 +17,7 @@ cutoff_energies = [50, 75, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600]
 for cutoff_energy in cutoff_energies:
     if rank == 0:
         print 'Simulating ' + str(cutoff_energy) + ' cutoff...'
-    mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+
     calc = GPAW(mode=PW(cutoff_energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing, recommended value in this course
                 xc='PBE',  # Exchange-correlation functional

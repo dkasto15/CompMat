@@ -19,7 +19,7 @@ ax_kpoints.set_ylabel('Simulated energy [atomic units]')
 ax_kpoints.set_xlabel('Wave vector [atomic units]')
 ax_kpoints.set_xlim([kpoints[0], kpoints[-1]])
 
-ax_energy = fig.add_subplot(212)
+ax_cutoff = fig.add_subplot(212)
 ax_cutoff.minorticks_on()
 ax_cutoff.grid(which='major', color='gray', linestyle='solid')
 ax_cutoff.grid(which='minor', color='gray', linestyle='dashed')
