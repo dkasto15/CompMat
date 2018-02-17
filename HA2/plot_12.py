@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-
+import numpy as np
 ''' Import files '''
 filename1 = '1_converge_kpoints_bulk.txt'
 filename2 = '2_converge_cutoff_energy_bulk.txt'
