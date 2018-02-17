@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-
+import numpy as np
 ''' Import files '''
 filename1 = '1_converge_kpoints_bulk.txt'
 filename2 = '2_converge_cutoff_energy_bulk.txt'
@@ -47,7 +47,7 @@ ax_cutoff = fig.add_subplot(212)
 ax_cutoff.minorticks_on()
 ax_cutoff.grid(which='major', color='gray', linestyle='solid')
 ax_cutoff.grid(which='minor', color='gray', linestyle='dashed')
-ax_cutoff.semilogy(energy_cutoff, energy_2)
+ax_cutoff.plot(energy_cutoff, energy_2)
 ax_cutoff.set_ylabel('Simulated energy [atomic units]')
 ax_cutoff.set_xlabel('Cutoff energy [atomic units]')
 ax_cutoff.set_xlim([energy_cutoff[0], energy_cutoff[-1]])
