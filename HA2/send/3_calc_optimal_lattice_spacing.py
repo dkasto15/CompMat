@@ -10,8 +10,8 @@ homedir = os.path.expanduser('~')
 n_k_points = 16
 energy_cutoff = 400
 
-q = 0.02  # Percentage difference from equalibrium for each point
-n_points = 7  # n_points: Number of lattice constants to loop over to find equilibrium.
+q = 0.02 # Percental difference from experimental lattice parameter for each point
+n_points = 7 # n_points: Number of lattice constants to loop over to find equilibrium.
 
 experimental_lattice_parameter = 4.05
 
