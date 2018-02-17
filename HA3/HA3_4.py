@@ -13,7 +13,7 @@ def main():
     Z_hydrogen = 1  # Charge of hydrogen nucleus in hartree units
 
     ''' Computation '''
-    nbr_of_conv_loops = 1
+    nbr_of_conv_loops = 5
     Z = Z_helium
     E_vec = np.zeros(nbr_of_conv_loops)
     eps_vec = np.zeros(nbr_of_conv_loops)
@@ -22,7 +22,7 @@ def main():
 
     for j in range(nbr_of_conv_loops):
         ''' Finite difference geometry (1D) '''
-        r_max = 10 + 2 * j  # Maximum radius of position grid in Hartree units
+        r_max = 3 + 2 * j  # Maximum radius of position grid in Hartree units
         r_min = 0  # Minimum radius of position grid in Hartree units
         r_max_vec[j] = r_max
         # n_r = 1000 # Number of elements in position grid
@@ -107,22 +107,6 @@ def compute_eps_and_phi(A, r):
     # corresponding to the lowest energy
     # u = u / np.sqrt(np.trapz(u**2, r))  # normalization
     return eps_min, u
-
-
-def calc_Vxc(r):
-    n = (3 / 4 * np.pi * r**3)
-    drdn = -(1 / 3) * (3 / np.pi * 4)**(1 / 3) * n ** (-4 / 3)
-
-    ex = -(3 / 4) * (3 * n / np.pi)**(1 / 3)
-
-    dexdn = -(3 / 4) * (3 / np.pi)**(1 / 3) * n**(-1 / 3)
-
-    ec_more_one = gamma / (1 + beta1 * np.sqrt(r) + beta1 * r)
-    dec_more_onedr = -gamma * (beta1 / (2 * np.sqrt(r)) + beta2) / (beta1 * np.sqrt())
-    ec_less_one = A * np.log(r) + B + C * r * np.log(r) + D * r
-
-    # ex = -(3 / 4) * (3 * 3 / 4 * np.pi)*
-
 
 if __name__ == '__main__':
     main()
