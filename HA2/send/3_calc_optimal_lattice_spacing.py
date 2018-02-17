@@ -45,10 +45,10 @@ for eps in np.linspace(-q, q, n_points):
     volume = al_bulk.get_volume()
     volumes.append(volume)
 
+# Plot energies as a function of unit cell volume (directly related to latt. const.)
+eos = EquationOfState(volumes, energies)
+v0, E_bulk, B = eos.fit()
 if rank == 0:
-    # Plot energies as a function of unit cell volume (directly related to latt. const.)
-    eos = EquationOfState(volumes, energies)
-    v0, E_bulk, B = eos.fit()
     eos.plot('Al_eos.png')
 
 # Latt. const. acc. to ASE doc., but why is this correct?
