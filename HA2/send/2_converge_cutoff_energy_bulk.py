@@ -24,7 +24,7 @@ for cutoff_energy in cutoff_energies:
                 mixer=mixer,  # Mixer
                 # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
                 kpts=(n_k_points, n_k_points, n_k_points),
-                txt='simulate_bulk_Al_GPAW_2.txt')  # name of GPAW output text file
+                txt='simulate_bulk_Al_2_GPAW.txt')  # name of GPAW output text file
 
     al_bulk.set_calculator(calc)
     total_energy = al_bulk.get_potential_energy()

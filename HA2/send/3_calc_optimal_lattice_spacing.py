@@ -25,7 +25,7 @@ calc = GPAW(mode=PW(energy_cutoff),  # use the LCAO basis mode
             mixer=mixer,  # Mixer
             # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
             kpts=(n_k_points, n_k_points, n_k_points),
-            txt='simulate_bulk_Al_GPAW_2.txt')  # name of GPAW output text file
+            txt='simulate_bulk_Al_3_GPAW.txt')  # name of GPAW output text file
 al_bulk.set_calculator(calc)
 
 energies = []
@@ -55,9 +55,9 @@ a_calc = (4 * v0)**(1 / 3.0)
 
 
 with open(homedir + '/TIF035/HA2/bulk/3_calc_optimal_lattice_spacing.txt', 'w') as textfile:
-    textfile.write('Optimal lattice spacing: ' + str(a_calc))
-    textfile.write('Corresponding energy: ' + str(E_bulk))
-    textfile.write('Corresponding bulk modulus: ' + str(B))
+    textfile.write('Optimal lattice spacing: ' + str(a_calc) + '\n')
+    textfile.write('Corresponding energy: ' + str(E_bulk) + '\n')
+    textfile.write('Corresponding bulk modulus: ' + str(B) + '\n')
     textfile.write('Energies, Volumes')
     for i in range(len(volumes)):
         textfile.write(str(energies[i]) + ',' + str(volumes[i]))
