@@ -2,13 +2,9 @@ from gpaw import GPAW, Mixer, PW
 from ase.build import *
 from ase.parallel import rank
 
-try:
-    with open('~/TIF035/HA2/bulk/converged_kpoint.txt', 'r') as textfile:
-        n_k_points = int(next(textfile))
-except Exception as e:
-    print('converged_kpoint.txt does not exist')
-    exit(1)
+homedir = os.path.expanduser('~')
 
+n_k_points = 16
 experimental_lattice_parameter = 4.05
 
 # # # Create Al bulk and initialize calculator parameters # # #
@@ -18,10 +14,20 @@ al_bulk = bulk('Al', 'fcc', a=experimental_lattice_parameter, cubic=False)
 energies = []
 cutoff_energies = [50, 100, 200, 300, 400, 500]
 for cutoff_energy in cutoff_energies:
-    particle.simulate_bulk_Al(cutoff_energy, n_k_points)
-    energies.append(particle.get_bulk_energy())
+    mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+    calc = GPAW(mode=PW(energy_cutoff),  # use the LCAO basis mode
+                h=0.18,  # grid spacing, recommended value in this course
+                xc='PBE',  # Exchange-correlation functional
+                mixer=mixer,  # Mixer
+                # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
+                kpts=(n_k_points, n_k_points, n_k_points),
+                txt='simulate_bulk_Al_GPAW_2.txt')  # name of GPAW output text file
 
-with open('~/TIF035/HA2/bulk/2_converge_cutoff_energy_bulk.txt', 'w') as textfile:
-    texfile.write('cutoff_energy, bulk_energy\n')
+    al_bulk.set_calculator(calc)
+    total_energy = al_bulk.get_potential_energy()
+    energies.append(total_energy)
+
+with open(homedir + '/TIF035/HA2/bulk/2_converge_cutoff_energy_bulk.txt', 'w') as textfile:
+    textfile.write('cutoff_energy, bulk_energy\n')
     for i in range(len(cutoff_energies)):
-        textfile.write(str(cutoff_energies[i]) + ',' + str(energies[i]))
+        textfile.write(str(cutoff_energies[i]) + ',' + str(energies[i]) + '\n')
