@@ -1,6 +1,7 @@
 from gpaw import GPAW, Mixer, PW
 from ase.build import *
 from ase.parallel import rank
+import os
 
 homedir = os.path.expanduser('~')
 
@@ -15,7 +16,7 @@ energies = []
 cutoff_energies = [50, 100, 200, 300, 400, 500]
 for cutoff_energy in cutoff_energies:
     mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
-    calc = GPAW(mode=PW(energy_cutoff),  # use the LCAO basis mode
+    calc = GPAW(mode=PW(cutoff_energy),  # use the LCAO basis mode
                 h=0.18,  # grid spacing, recommended value in this course
                 xc='PBE',  # Exchange-correlation functional
                 mixer=mixer,  # Mixer
