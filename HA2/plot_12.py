@@ -23,4 +23,5 @@ ax_kpoints.set_xlim([kpoints[0], kpoints[-1]])
 ax_energy = fig.add_subplot(212)
 
 fig.subplots_adjust(hspace=0.5)
+
 plt.show()
