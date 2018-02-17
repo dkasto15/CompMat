@@ -13,7 +13,7 @@ mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small 
 al_bulk = bulk('Al', 'fcc', a=experimental_lattice_parameter, cubic=False)
 
 energies = []
-cutoff_energies = [50, 100, 200, 300, 400, 500]
+cutoff_energies = [20, 50, 70, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600]
 for cutoff_energy in cutoff_energies:
     mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
     calc = GPAW(mode=PW(cutoff_energy),  # use the LCAO basis mode
