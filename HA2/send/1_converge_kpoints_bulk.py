@@ -1,6 +1,19 @@
+#!/usr/bin/env python
+# coding=utf-8
+
+# # # imports # # #
+import numpy as np
 from gpaw import GPAW, Mixer, PW
 from ase.build import *
+from ase.io import read
+from ase.units import kJ, J, m
+from ase.eos import EquationOfState
+from ase.build import fcc111, fcc100, add_adsorbate
+from ase.cluster.wulff import wulff_construction
+from ase.visualize import view
 from ase.parallel import rank
+from ase import Atoms
+import sys
 
 experimental_lattice_parameter = 4.05
 
@@ -31,6 +44,6 @@ for n in n_k_points:
     energies.append(total_energy)
 
 with open('~/TIF035/HA2/bulk/1_converge_kpoints_bulk.txt', 'w') as textfile:
-    texfile.write('number of k points, bulk_energy\n')
+    textfile.write('number of k points, bulk_energy\n')
     for i in range(len(n_k_points)):
         textfile.write(str(n_k_points[i]) + ',' + str(energies[i]))
