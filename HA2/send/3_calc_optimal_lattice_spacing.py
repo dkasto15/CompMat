@@ -10,8 +10,8 @@ homedir = os.path.expanduser('~')
 n_k_points = 16
 energy_cutoff = 400
 
-q = 0.02 # Percental difference from experimental lattice parameter for each point
-n_points = 7 # n_points: Number of lattice constants to loop over to find equilibrium.
+q = 0.02  # Percental difference from experimental lattice parameter for each point
+n_points = 7  # n_points: Number of lattice constants to loop over to find equilibrium.
 
 experimental_lattice_parameter = 4.05
 
@@ -50,12 +50,11 @@ eos = EquationOfState(volumes, energies)
 v0, E_bulk, B = eos.fit()
 if rank == 0:
     eos.plot('Al_eos.png')
-
 # Latt. const. acc. to ASE doc., but why is this correct?
 a_calc = (4 * v0)**(1 / 3.0)
 
 
-with open(homedir + '/TIF035/HA3/bulk/3_calc_optimal_lattice_spacing.txt', 'w') as textfile:
+with open(homedir + '/TIF035/HA2/bulk/3_calc_optimal_lattice_spacing.txt', 'w') as textfile:
     textfile.write('Optimal lattice spacing: ' + str(a_calc))
     textfile.write('Corresponding energy: ' + str(E_bulk))
     textfile.write('Corresponding bulk modulus: ' + str(B))
