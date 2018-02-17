@@ -46,7 +46,11 @@ for n in n_k_points:
     total_energy = al_bulk.get_potential_energy()
     energies.append(total_energy)
 
+<<<<<<< HEAD
 with open(homedir + '/TIF035/HA2/bulk/1_converge_kpoints_bulk.txt', 'w') as textfile:
+=======
+with open('/c3se/users/kasto/Hebbe/TIF035/HA2/bulk/1_converge_kpoints_bulk.txt', 'w') as textfile:
+>>>>>>> 659d7c33b918c72c02078aa88bfcd2969a781cf7
     textfile.write('number of k points, bulk_energy\n')
     for i in range(len(n_k_points)):
         textfile.write(str(n_k_points[i]) + ',' + str(energies[i]) + '\n')

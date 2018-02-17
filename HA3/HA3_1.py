@@ -87,12 +87,11 @@ def calc_Q(alpha_p, alpha_r, alpha_q, alpha_s):
 
 
 def calc_S(alpha_p, alpha_q):
-    return 2 * (np.pi / (alpha_p + alpha_q))**(3. / 2.)
-
+    return (np.pi / (alpha_p + alpha_q))**(3. / 2.)
 
 def calc_h(alpha_p, alpha_q):
-    return 6 * alpha_q * alpha_p * (np.pi)**(3. / 2.) / ((alpha_p + alpha_q)**(5. / 2.))
-
+    return 3 * alpha_q * alpha_p * (np.pi)**(3. / 2.) \
+           / ((alpha_p + alpha_q)**(5. / 2.)) - 4 * np.pi / (alpha_p + alpha_q)
 
 def C_norm(C, S, ni=4):
     summ = 0
