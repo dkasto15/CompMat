@@ -36,14 +36,14 @@ for n in n_k_points:
                 xc='PBE',  # Exchange-correlation functional
                 mixer=mixer,  # Mixer
                 # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
-                kpts=(n_k_points, n_k_points, n_k_points),
+                kpts=(n, n, n),
                 txt='simulate_bulk_Al_GPAW.txt')  # name of GPAW output text file
 
     al_bulk.set_calculator(calc)
     total_energy = al_bulk.get_potential_energy()
     energies.append(total_energy)
 
-with open('~/TIF035/HA2/bulk/1_converge_kpoints_bulk.txt', 'w') as textfile:
+with open('/c3se/users/kasto/Hebbe/TIF035/HA2/bulk/1_converge_kpoints_bulk.txt', 'w') as textfile:
     textfile.write('number of k points, bulk_energy\n')
     for i in range(len(n_k_points)):
         textfile.write(str(n_k_points[i]) + ',' + str(energies[i]))
