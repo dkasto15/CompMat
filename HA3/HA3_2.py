@@ -48,8 +48,8 @@ def main():
 
 
 def compute_VsH_and_U(A, r, phi_s_H):
-    n_s_H = abs(phi_s_H * phi_s_H)  # Electron density hydrogen ground state
-    # print(trapz(n_s_H, r)) # WHY NOT NORMALIZED???
+    n_s_H = np.absolute(phi_s_H * phi_s_H)  # Electron density hydrogen ground state
+    print(trapz(n_s_H*4*np.pi*r**2, r)) # Check if normalized
     U_0 = npl.solve(A, -4 * np.pi * r * n_s_H)
     U = U_0 + r / r[-1]
     V_s_H = U / r

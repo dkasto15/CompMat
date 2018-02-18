@@ -13,7 +13,7 @@ def main():
     Z_hydrogen = 1  # Charge of hydrogen nucleus in hartree units
 
     ''' Computation '''
-    nbr_of_conv_loops = 1
+    nbr_of_conv_loops = 3
     Z = Z_helium
     E_vec = np.zeros(nbr_of_conv_loops)
     eps_vec = np.zeros(nbr_of_conv_loops)
@@ -22,11 +22,11 @@ def main():
 
     for j in range(nbr_of_conv_loops):
         ''' Finite difference geometry (1D) '''
-        r_max = 10 + 2 * j  # Maximum radius of position grid in Hartree units
+        r_max = 3 + 2 * j  # Maximum radius of position grid in Hartree units
         r_min = 0  # Minimum radius of position grid in Hartree units
         r_max_vec[j] = r_max
         # n_r = 1000 # Number of elements in position grid
-        h = 0.1  # step size, based on that it was sufficient for task 2
+        h = 0.01  # step size, based on that it was sufficient for task 2
         r = np.arange(r_min, r_max, h)  # constant step size
         # r = np.linspace(r_min, r_max, n_r+1) # Position grid in Hartree units
         r = r[1:]  # Remove singularity in r=0
@@ -43,10 +43,8 @@ def main():
         E_0 = 1
         E_0_old = 0
         counter = 0
-        V_xc = 0
-        eps_xc = 0
-        V_x = 0
-        V_c = 0
+        V_xc = calc_Vxc_and_epsxc(r)[0]
+        eps_xc = calc_Vxc_and_epsxc(r)[1]
         while(abs(E_0 - E_0_old) > 10**(-5) or counter < 3):  # Run at least
               # three iterations to reduce susceptibility to initial values
             counter += 1
@@ -54,7 +52,7 @@ def main():
             phi = u/(np.sqrt(4*np.pi)*r)
             V_s_H = compute_VsH_and_U(A_dd, r, phi)[0]
             V_H = V_s_H
-            A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_x + V_c
+            A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_xc
             eps, u = compute_eps_and_phi(A, r)  # min eigenvalue & eigenvector
             E_0 = 2 * eps - 2 * trapz(abs(u)**(2.0) * (0.5 * V_H + V_xc - eps_xc), r)
             # print(E_0)
@@ -109,30 +107,34 @@ def compute_eps_and_phi(A, r):
     return eps_min, u
 
 
-def calc_Vxc(r):
+def calc_Vxc_and_epsxc(r):
     A, B, C, D = 0.0311, -0.048, 0.0020, -0.0116
     gamma, beta1, beta2 = -0.1423, 1.0529, 0.3334
+    # ec = []
+    # dexc_dn = []
     n = (3 / 4 * np.pi * r**3)
     drdn = -(1 / 3) * (3 / np.pi * 4)**(1 / 3) * n ** (-4 / 3)
-    e_x = -(3 / 4) * (3 * n / np.pi)**(1 / 3)
+    ex = (-(3 / 4) * (3 * n / np.pi)**(1 / 3))
     ec_over_one = gamma / (1 + beta1 * np.sqrt(r) + beta2 * r)
     ec_under_one = A * np.log(r) + B + C * r * np.log(r) + D * r
     dexdn = -(1 / 4) * (3 / np.pi)**(1 / 3) * n**(-2 / 3)
-
     dec_over_dn = drdn * -gamma * (beta1 / (2 * np.sqrt(r)) + beta2) \
                 / ((beta1 * np.sqrt(r) + beta2 * r + 1)**2)
     dec_under_dn = drdn * (A / r + C * np.log(r) + C + D)
     r_val = 0
     counter = 0
     while r_val < 1:
-        r_val = r[counter]
         counter += 1
-
-    # ex = -(3 / 4) * (3 * 3 / 4 * np.pi)*
+        r_val = r[counter]
+    ec = np.array([])
+    ec = np.append(ec, ec_under_one[:counter])
+    ec = np.append(ec, ec_over_one[counter:])
     exc = ex + ec
+    dexc_dn = np.array([])
+    dexc_dn = np.append(dexc_dn, dexdn[:counter] + dec_under_dn[:counter])
+    dexc_dn = np.append(dexc_dn, dec_over_dn[counter:] + dexdn[counter:])
     V_xc = exc + n * dexc_dn
-    return V_xc
-
+    return V_xc, exc
 
 if __name__ == '__main__':
     main()

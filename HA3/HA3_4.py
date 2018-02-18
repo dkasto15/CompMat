@@ -13,7 +13,7 @@ def main():
     Z_hydrogen = 1  # Charge of hydrogen nucleus in hartree units
 
     ''' Computation '''
-    nbr_of_conv_loops = 5
+    nbr_of_conv_loops = 7
     Z = Z_helium
     E_vec = np.zeros(nbr_of_conv_loops)
     eps_vec = np.zeros(nbr_of_conv_loops)
@@ -22,7 +22,7 @@ def main():
 
     for j in range(nbr_of_conv_loops):
         ''' Finite difference geometry (1D) '''
-        r_max = 3 + 2 * j  # Maximum radius of position grid in Hartree units
+        r_max = 3 + 3 * j  # Maximum radius of position grid in Hartree units
         r_min = 0  # Minimum radius of position grid in Hartree units
         r_max_vec[j] = r_max
         # n_r = 1000 # Number of elements in position grid
@@ -51,15 +51,15 @@ def main():
               # three iterations to reduce susceptibility to initial values
             counter += 1
             E_0_old = E_0
-            phi = u/(np.sqrt(4*np.pi)*r)
+            phi = u/(np.sqrt(4.0*np.pi)*r)
+            n_s_H = np.absolute(phi * phi)  # Radial density helium ground state
+            print(trapz(n_s_H*4*np.pi*r**2, r)) # Check if normalized
             V_s_H = compute_VsH_and_U(A_dd, r, phi)[0]
             V_H = V_s_H
             A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_x + V_c
-            eps, u = compute_eps_and_phi(A, r)  # min eigenvalue & eigenvector
-            E_0 = 2 * eps - 2 * trapz(abs(u)**(2.0) * (0.5 * V_H + V_xc - eps_xc), r)
+            eps, u, E_0 = compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd)  # min eigenvalue & eigenvector
             # print(E_0)
-
-        E_vec[j] = np.real(E_0)  # "real" to suppress annoying complex warning
+        E_vec[j] = E_0
         eps_vec[j] = eps
         print('Done: r_max = ' + str(r_max))
         # phi_vec[j] = phi_s_H
@@ -79,7 +79,7 @@ def main():
     fig_2 = plt.figure()
     ax_potential2 = fig_2.add_subplot(111)
     ax_potential2.plot(r, 2 * 4 * np.pi * r**2 * u**2, label='Eigenvalues')
-    ax_potential2.set_title('Electron densty for helium electons when the \n' +
+    ax_potential2.set_title('Electron density for helium electons when the \n' +
                             'maximum radius in simulation was ' + str(r_max) + ' a.u.')
     ax_potential2.set_xlabel('Radius [a.u.]')
     ax_potential2.set_ylabel('Electron densinsity [a.u.]')
@@ -96,17 +96,66 @@ def main():
 
 ''' Functions '''
 
-def compute_eps_and_phi(A, r):
-    (eig, wave_functions) = sparse.linalg.eigs(A, which='SM')  # SM = smallest
-    # magnitude of the eigenvectors
-    # (eig, wave_functions) = npl.eig(A)
-    eig = [np.real(i) for i in eig]
-    eps_min_ind = np.argmin(eig) # index of lowest eigenvalue (epsilon) in the vector
-    eps_min = eig[eps_min_ind]
-    u = wave_functions[:, eps_min_ind] # Find the wave function set
+def compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd):
+    # (eig, wave) = sparse.linalg.eigs(A, which='SM')  # SM = smallest
+    # # magnitude of the eigenvectors
+    (eig, wave) = npl.eig(A)
+    eig_vec = []
+    wave_vec = []
+    for ind, e in enumerate(eig): # Remove non-physical solutions (imag. eigenvalues)
+        if np.isreal(e):
+            eig_vec.append(e)
+            wave_vec.append(wave[:, ind])
+    eig = np.transpose(eig_vec)
+    wave = np.transpose(wave_vec)
+    E_0_vec = np.zeros(len(eig))
+    for ind, e in enumerate(eig):
+        # wave[:,ind] = wave[:,ind] / np.sqrt(np.trapz(np.absolute(wave[:,ind])**2, r))
+        phi = wave[:,ind]/(np.sqrt(4.0*np.pi)*r)
+        # norm = np.sqrt(np.trapz(np.absolute(phi)**2, r))
+        # phi = phi / norm
+        V_H = compute_VsH_and_U(A_dd, r, phi)[0]
+        E_0_vec[ind] = 2 * e - 2 * trapz(np.absolute(wave[:,ind])**(2.0) * (0.5 * V_H + V_xc - eps_xc), r)
+    E_min_ind = np.argmin(E_0_vec) # index of lowest energy
+    print(E_min_ind)
+    print(np.argmin(eig))
+    eps_min = eig[E_min_ind]
+    E = E_0_vec[E_min_ind]
+    u = wave[:, E_min_ind]
+    # norm = np.sqrt(np.trapz(np.absolute(wave[:, E_min_ind])**2, r))
+    # u = wave[:, E_min_ind] / norm # Find the wave function set
     # corresponding to the lowest energy
     # u = u / np.sqrt(np.trapz(u**2, r))  # normalization
-    return eps_min, u
+    return eps_min, u, E
+
+def calc_Vxc_and_epsxc(r):
+    A, B, C, D = 0.0311, -0.048, 0.0020, -0.0116
+    gamma, beta1, beta2 = -0.1423, 1.0529, 0.3334
+    # ec = []
+    # dexc_dn = []
+    n = (3 / 4 * np.pi * r**3)
+    drdn = -(1 / 3) * (3 / np.pi * 4)**(1 / 3) * n ** (-4 / 3)
+    ex = (-(3 / 4) * (3 * n / np.pi)**(1 / 3))
+    ec_over_one = gamma / (1 + beta1 * np.sqrt(r) + beta2 * r)
+    ec_under_one = A * np.log(r) + B + C * r * np.log(r) + D * r
+    dexdn = -(1 / 4) * (3 / np.pi)**(1 / 3) * n**(-2 / 3)
+    dec_over_dn = drdn * -gamma * (beta1 / (2 * np.sqrt(r)) + beta2) \
+                / ((beta1 * np.sqrt(r) + beta2 * r + 1)**2)
+    dec_under_dn = drdn * (A / r + C * np.log(r) + C + D)
+    r_val = 0
+    counter = 0
+    while r_val < 1:
+        counter += 1
+        r_val = r[counter]
+    ec = np.array([])
+    ec = np.append(ec, ec_under_one[:counter])
+    ec = np.append(ec, ec_over_one[counter:])
+    exc = ex + ec
+    dexc_dn = np.array([])
+    dexc_dn = np.append(dexc_dn, dexdn[:counter] + dec_under_dn[:counter])
+    dexc_dn = np.append(dexc_dn, dec_over_dn[counter:] + dexdn[counter:])
+    V_xc = exc + n * dexc_dn
+    return V_xc, exc
 
 if __name__ == '__main__':
     main()
