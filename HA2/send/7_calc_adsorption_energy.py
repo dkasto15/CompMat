@@ -3,6 +3,9 @@ from gpaw import GPAW, Mixer, PW
 from ase.build import *
 from ase.parallel import rank
 from ase.build import fcc111, fcc100, add_adsorbate
+from ase import Atoms
+from ase.optimize import BFGS, QuasiNewton
+from ase.constraints import FixAtoms
 import os
 
 homedir = os.path.expanduser('~')
@@ -12,9 +15,9 @@ energy_bulk = -3.73707160907
 
 N_x = 1
 N_y = 1
-N_z = 7
+N_z = 14
 n_k_points = 16
-energy_cutoff = 300
+energy_cutoff = 350
 
 mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
 
@@ -26,12 +29,12 @@ CO_adsorbate = Atoms('CO')
 
 energy_pot = []
 sigmas = []
-
-for i, surface in enumerate(surfaces):
-    cell = surface.get_cell()  # Unit cell object of the Al FCC 111
+areas = []
+for i, slab in enumerate(surfaces):
+    cell = slab.get_cell()  # Unit cell object of the Al FCC 111
     area = np.linalg.norm(np.cross(cell[0], cell[1]))  # Calc. surface area
-
-    add_adsorbate(slab=surface, adsorbate=CO_adsorbate,
+    areas.append(area)
+    add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
                   height=5, position='ontop')
 
     # Initialize new calculator that only considers k-space in xy-plane,
@@ -45,21 +48,23 @@ for i, surface in enumerate(surfaces):
 
     slab.set_calculator(calc)
 
-    mask = [atom.symbol != 'Al' for atom in slab]
-    constraint = FixAtoms(mask=mask)
-    surface.set_constraint(constraint)
-    dyn = BFGS(surface,
-               trajectory='relax_adsorbate_' + miller_indices[i] + '.traj',
-               logfile='relax_adsorbate_' + miller_indices[i] + '.traj')
-    dyn.run(fmax=0.01)
+    #mask = [atom.symbol != 'Al' for atom in slab]
+    #constraint = FixAtoms(mask=mask)
+    # slab.set_constraint(constraint)
 
-    energy_pot = surface.get_potential_energy()
-    energies.append(energy_pot)
-    sigmas.append((1 / (2.0 * area)) * (energy_pot - N_x * N_y * energy_bulk))
+    # dyn = BFGS(slab,
+    #           trajectory='relax_adsorbate_' + miller_indices[i] + '.traj',
+    #           logfile='relax_adsorbate_' + miller_indices[i] + '.traj')
+    # dyn.run(fmax=0.01)
+
+    energy_slab = slab.get_potential_energy()
+    energies.append(energy_slab)
+    sigmas.append((1 / (2.0 * area)) * (energy_slab - N_z * energy_bulk))
 
 with open(homedir + '/TIF035/HA2/surface/7_calc_adsorbtion_energy.txt', 'w') as textfile:
-    textfile.write('miller_index, bulk_energy, surface_energy_density\n')
+    textfile.write('miller_index, area, bulk_energy, surface_energy_density\n')
     for i in range(len(surfaces)):
         textfile.write(str(miller_indices[i]) + ',' +
+                       str(areas[i]) + ',' +
                        str(energies[i]) + ',' +
                        str(sigmas[i]) + '\n')

@@ -15,6 +15,7 @@ N_y = 1
 N_z = 7
 
 slab111 = fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=7.5)
+slab111.center(axis=2)
 cell111 = slab111.get_cell()  # Unit cell object of the Al FCC 111
 area111 = np.linalg.norm(np.cross(cell111[0], cell111[1]))  # Calc. surface area
 

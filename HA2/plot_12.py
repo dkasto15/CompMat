@@ -25,6 +25,7 @@ with open('HA2/' + filename2, 'r') as textfile:
         energy_cutoff.append(float(line[0]))
         energy_2.append(float(line[1]))
 
+
 ''' Plotting '''
 # if whichcase == 1:
 #     x = kpoints
@@ -33,7 +34,7 @@ with open('HA2/' + filename2, 'r') as textfile:
 #     x = energy_cutoff
 #     y = energy_2
 fig = plt.figure()
-ax_kpoints = fig.add_subplot(211)
+ax_kpoints = fig.add_subplot(211, sharey=True)
 ax_kpoints.minorticks_on()
 ax_kpoints.grid(which='major', color='gray', linestyle='solid')
 ax_kpoints.grid(which='minor', color='gray', linestyle='dashed')
@@ -56,3 +57,4 @@ ax_cutoff.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 fig.subplots_adjust(hspace=0.5)
 
 plt.show()
+plt.savefig('converge_bulk.png', bbox_inches='tight')
