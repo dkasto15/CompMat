@@ -40,7 +40,7 @@ for n in n_k_points:
                 mixer=mixer,  # Mixer
                 # k-point grid - LOOP OVER LATER TO CHECK "CONVERGENCE"
                 kpts=(n, n, n),
-                txt='simulate_bulk_Al_GPAW.txt')  # name of GPAW output text file
+                txt='simulate_bulk_Al_1_GPAW.txt')  # name of GPAW output text file
 
     al_bulk.set_calculator(calc)
     total_energy = al_bulk.get_potential_energy()
