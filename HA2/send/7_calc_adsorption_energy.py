@@ -13,7 +13,7 @@ from gpaw.poisson import PoissonSolver
 import os
 
 homedir = os.path.expanduser('~')
-
+file_simulation_parameters = open('7_simulation_params.txt', 'w')
 lattice_parameter = 4.04358928739
 energy_bulk = -3.73707160907
 
@@ -31,11 +31,12 @@ surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=1
 miller_indices = ['111', '100']
 
 d_CO = 1.128  # CO bondlength in [Å]
-CO_adsorbate = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
+CO_adsorbate = Atoms('CO')
 
 energy_pot = []
 sigmas = []
 areas = []
+
 for i, slab in enumerate(surfaces):
     cell = slab.get_cell()  # Unit cell object of the Al FCC 111
     area = np.linalg.norm(np.cross(cell[0], cell[1]))  # Calc. surface area
@@ -44,7 +45,7 @@ for i, slab in enumerate(surfaces):
     slab.center(axis=2)
 
     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=1, position='ontop')
+                  height=2, position='ontop')
 
     write('slab' + miller_indices[i] + '.png', slab, rotation='10z,-80x')
     # Initialize new calculator that only considers k-space in xy-plane,
@@ -53,13 +54,16 @@ for i, slab in enumerate(surfaces):
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
                 mixer=mixer,
-                poissonsolver=PoissonSolver(eps=1e-12),
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
-                txt='simulate_surface_Al_7_GPAW.txt')  # name of GPAW output text file
+                txt='simulate_surface_Al_7_GPAW_2.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
 
     mask = [atom.symbol == 'Al' for atom in slab]
+
+    file_simulation_parameters.write('mask' + '\n')
+    for el in mask:
+        file_simulation_parameters.write(str(el) + '\n')
     constraint = FixAtoms(mask=mask)
     slab.set_constraint(constraint)
 
@@ -72,6 +76,7 @@ for i, slab in enumerate(surfaces):
     energies.append(energy_slab)
     sigmas.append((1 / (2.0 * area)) * (energy_slab - N_z * energy_bulk))
 
+file_simulation_parameters.close()
 with open(homedir + '/TIF035/HA2/surface/7_calc_adsorbtion_energy.txt', 'w') as textfile:
     textfile.write('miller_index, area, bulk_energy, surface_energy_density\n')
     for i in range(len(surfaces)):
