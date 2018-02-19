@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding=utf-8
 import numpy as np
 from gpaw import GPAW, Mixer, PW
 from ase.build import *
@@ -6,6 +8,8 @@ from ase.build import fcc111, fcc100, add_adsorbate
 from ase import Atoms
 from ase.optimize import BFGS, QuasiNewton
 from ase.constraints import FixAtoms
+from ase.io import write
+from gpaw.poisson import PoissonSolver
 import os
 
 homedir = os.path.expanduser('~')
@@ -22,10 +26,12 @@ energy_cutoff = 350
 mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
 
 surfaces = []
-surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=7.5))
-surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=7.5))
+surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
+surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
 miller_indices = ['111', '100']
-CO_adsorbate = Atoms('CO')
+
+d_CO = 1.128  # CO bondlength in [Å]
+CO_adsorbate = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
 
 energy_pot = []
 sigmas = []
@@ -34,28 +40,33 @@ for i, slab in enumerate(surfaces):
     cell = slab.get_cell()  # Unit cell object of the Al FCC 111
     area = np.linalg.norm(np.cross(cell[0], cell[1]))  # Calc. surface area
     areas.append(area)
-    add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=5, position='ontop')
 
+    slab.center(axis=2)
+
+    add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
+                  height=1, position='ontop')
+
+    write('slab' + miller_indices[i] + '.png', slab, rotation='10z,-80x')
     # Initialize new calculator that only considers k-space in xy-plane,
     # since we're only looking at the surface
     calc = GPAW(mode=PW(energy_cutoff),  # use the LCAO basis mode
                 h=0.18,  # grid spacing
                 xc='PBE',  # XC-functional
                 mixer=mixer,
+                poissonsolver=PoissonSolver(eps=1e-12),
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
                 txt='simulate_surface_Al_7_GPAW.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
 
-    #mask = [atom.symbol != 'Al' for atom in slab]
-    #constraint = FixAtoms(mask=mask)
-    # slab.set_constraint(constraint)
+    mask = [atom.symbol == 'Al' for atom in slab]
+    constraint = FixAtoms(mask=mask)
+    slab.set_constraint(constraint)
 
-    # dyn = BFGS(slab,
-    #           trajectory='relax_adsorbate_' + miller_indices[i] + '.traj',
-    #           logfile='relax_adsorbate_' + miller_indices[i] + '.traj')
-    # dyn.run(fmax=0.01)
+    dyn = BFGS(slab,
+               trajectory='relax_adsorbate_' + miller_indices[i] + '.traj',
+               logfile='relax_adsorbate_' + miller_indices[i] + '.qn')
+    dyn.run(fmax=0.01)
 
     energy_slab = slab.get_potential_energy()
     energies.append(energy_slab)

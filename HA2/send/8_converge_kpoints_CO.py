@@ -8,11 +8,12 @@ import os
 homedir = os.path.expanduser('~')
 
 CO = Atoms('CO')
+CO.set_cell([10, 10, 10])
+CO.center()
 
-mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+mixer = Mixer(beta=0.25, nmaxold=3, weight=1.0)  # Recommended values for small systems
 
-n_k_points = 16
-energy_cutoff = 300
+energy_cutoff = 350
 energies = []
 
 n_k_points = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -31,7 +32,7 @@ for n in n_k_points:
     energies.append(energy_pot)
 
 with open(homedir + '/TIF035/HA2/surface/8_converge_kpoints_CO.txt', 'w') as textfile:
-    textfile.write('atom depth, bulk_energy\n')
+    textfile.write('Number of k-points, CO energy\n')
     for i in range(len(N_z_vec)):
-        textfile.write(str(N_z_vec[i]) + ',' +
+        textfile.write(str(n_k_points[i]) + ',' +
                        str(energies[i]) + '\n')
