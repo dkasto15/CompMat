@@ -26,9 +26,9 @@ energy_cutoff = 350
 mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
 
 surfaces = []
-surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
 surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
-miller_indices = ['111', '100']
+surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
+miller_indices = ['100', '111']
 
 d_CO = 1.128  # CO bondlength in [Å]
 CO_adsorbate = Atoms('CO')
