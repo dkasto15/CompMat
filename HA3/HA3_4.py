@@ -13,7 +13,7 @@ def main():
     Z_hydrogen = 1  # Charge of hydrogen nucleus in hartree units
 
     ''' Computation '''
-    nbr_of_conv_loops = 7
+    nbr_of_conv_loops = 5
     Z = Z_helium
     E_vec = np.zeros(nbr_of_conv_loops)
     eps_vec = np.zeros(nbr_of_conv_loops)
@@ -26,7 +26,7 @@ def main():
         r_min = 0  # Minimum radius of position grid in Hartree units
         r_max_vec[j] = r_max
         # n_r = 1000 # Number of elements in position grid
-        h = 0.1  # step size, based on that it was sufficient for task 2
+        h = 0.2  # step size
         r = np.arange(r_min, r_max, h)  # constant step size
         # r = np.linspace(r_min, r_max, n_r+1) # Position grid in Hartree units
         r = r[1:]  # Remove singularity in r=0
@@ -37,8 +37,9 @@ def main():
 
         ''' Analytical solutions (and initial guesses) '''
         # V_hartree = 1/r - (1 + 1/r)*np.exp(-2*r) # The hartree potential for hydrogen
-        phi_s_H_theor = (1 / np.sqrt(np.pi)) * np.exp(-r)  # Wave function for hydrogen in hartree
-        u = phi_s_H_theor  # initial guess
+        phi_s_H_theor = (1 / np.sqrt(np.pi)) * np.exp(-r)  # Radial wave function
+                                                           # for hydrogen in hartree
+        u = phi_s_H_theor  # Initial guess
 
         E_0 = 1
         E_0_old = 0
@@ -51,38 +52,39 @@ def main():
               # three iterations to reduce susceptibility to initial values
             counter += 1
             E_0_old = E_0
-            phi = u/(np.sqrt(4.0*np.pi)*r)
-            n_s_H = np.absolute(phi * phi)  # Radial density helium ground state
-            print(trapz(n_s_H*4*np.pi*r**2, r)) # Check if normalized
-            V_s_H = compute_VsH_and_U(A_dd, r, phi)[0]
-            V_H = V_s_H
-            A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_x + V_c
-            eps, u, E_0 = compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd)  # min eigenvalue & eigenvector
+            phi = u / (np.sqrt(4.0 * np.pi) * r) # The wave function
+            # n_s_H = np.absolute(phi * phi)  # Radial density helium ground state
+            # print(trapz(n_s_H * 4 * np.pi * r**2, r)) # Check if normalized
+            V_s_H = compute_VsH_and_U(A_dd, r, phi)[0] # Electro-static potential
+            V_H = V_s_H # Hartree potential, approximated as V_s_H
+            A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_x + V_c # Kohn-Sham matrix
+            eps, u, E_0 = compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd) # min
+            # eigenvalue, eigenvector & energy
             # print(E_0)
-        E_vec[j] = E_0
-        eps_vec[j] = eps
+        E_vec[j] = E_0 # Energy
+        eps_vec[j] = eps # Eigenvalue
         print('Done: r_max = ' + str(r_max))
         # phi_vec[j] = phi_s_H
 
     ''' Plotting '''
     fig_1 = plt.figure()
-    ax_potential = fig_1.add_subplot(111)
-    #ax_potential.plot(r_max_vec, eps_vec, label='Eigenvalues')
-    ax_potential.plot(r_max_vec, E_vec, '--', label='Energies')
-    ax_potential.set_xlabel('Max. radius [a.u.]')
-    ax_potential.set_ylabel('Converged energy value [a.u]')
-    ax_potential.set_title('Energy convergence when increasing maximum radius')
-    # ax_potential.legend(loc=2)
+    ax_pot = fig_1.add_subplot(111)
+    #ax_pot.plot(r_max_vec, eps_vec, label='Eigenvalues')
+    ax_pot.plot(r_max_vec, E_vec, '--', label='Energies') # Plot E as func. of r_max
+    ax_pot.set_xlabel('Max. radius [a.u.]')
+    ax_pot.set_ylabel('Converged energy value [a.u]')
+    ax_pot.set_title('Energy convergence when increasing maximum radius')
+    # ax_pot.legend(loc=2)
     plt.savefig('eigAndEn.eps')
     plt.savefig('eigAndEn.png')
 
     fig_2 = plt.figure()
-    ax_potential2 = fig_2.add_subplot(111)
-    ax_potential2.plot(r, 2 * 4 * np.pi * r**2 * u**2, label='Eigenvalues')
-    ax_potential2.set_title('Electron density for helium electons when the \n' +
+    ax_pot2 = fig_2.add_subplot(111)
+    ax_pot2.plot(r, 4 * np.pi * r**2 * np.absolute(phi)**2, label='Eigenvalues')
+    ax_pot2.set_title('Radial probability distribution for helium electrons when the \n' +
                             'maximum radius in simulation was ' + str(r_max) + ' a.u.')
-    ax_potential2.set_xlabel('Radius [a.u.]')
-    ax_potential2.set_ylabel('Electron densinsity [a.u.]')
+    ax_pot2.set_xlabel('Radius [a.u.]')
+    ax_pot2.set_ylabel('Electron density [a.u.]')
 
     plt.show()
 
@@ -99,7 +101,7 @@ def main():
 def compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd):
     # (eig, wave) = sparse.linalg.eigs(A, which='SM')  # SM = smallest
     # # magnitude of the eigenvectors
-    (eig, wave) = npl.eig(A)
+    (eig, wave) = npl.eig(A) # Find eigenvalues and eigenvectors to Kohn-Sham eq.
     eig_vec = []
     wave_vec = []
     for ind, e in enumerate(eig): # Remove non-physical solutions (imag. eigenvalues)
@@ -109,26 +111,24 @@ def compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd):
     eig = np.transpose(eig_vec)
     wave = np.transpose(wave_vec)
     E_0_vec = np.zeros(len(eig))
-    for ind, e in enumerate(eig):
-        # wave[:,ind] = wave[:,ind] / np.sqrt(np.trapz(np.absolute(wave[:,ind])**2, r))
-        phi = wave[:,ind]/(np.sqrt(4.0*np.pi)*r)
-        # norm = np.sqrt(np.trapz(np.absolute(phi)**2, r))
-        # phi = phi / norm
-        V_H = compute_VsH_and_U(A_dd, r, phi)[0]
-        E_0_vec[ind] = 2 * e - 2 * trapz(np.absolute(wave[:,ind])**(2.0) * (0.5 * V_H + V_xc - eps_xc), r)
+    for ind, e in enumerate(eig): # Pick the solution with the lowest energy
+        phi = wave[:, ind] / (np.sqrt(4.0 * np.pi) * r)
+        n_s_H = np.absolute(phi * phi)  # Electron density helium ground state / 2
+        norm = np.sqrt(trapz(n_s_H * 4 * np.pi * r**2, r)) # Normalization factor
+        wave[:, ind] = wave[:, ind] / norm # Normalize eigenfunction (u)
+        phi = phi / norm # Normalize wave function
+        V_H = compute_VsH_and_U(A_dd, r, phi)[0] # Hartree potential
+        E_0_vec[ind] = 2 * e - 2 * trapz(np.absolute(wave[:,ind])**(2.0) * \
+                       (0.5 * V_H + V_xc - eps_xc), r) # Ground state energy
     E_min_ind = np.argmin(E_0_vec) # index of lowest energy
-    print(E_min_ind)
-    print(np.argmin(eig))
-    eps_min = eig[E_min_ind]
-    E = E_0_vec[E_min_ind]
-    u = wave[:, E_min_ind]
-    # norm = np.sqrt(np.trapz(np.absolute(wave[:, E_min_ind])**2, r))
-    # u = wave[:, E_min_ind] / norm # Find the wave function set
-    # corresponding to the lowest energy
-    # u = u / np.sqrt(np.trapz(u**2, r))  # normalization
+    # print(E_min_ind) # Check if E calc above is necessary or if eig would yield same index
+    # print(np.argmin(eig)) # Check if E calc above is necessary or if eig would yield same index
+    eps_min = eig[E_min_ind] # Pick the eigenvalue corresponding to the lowest energy
+    E = E_0_vec[E_min_ind] # Pick the lowest energy
+    u = wave[:, E_min_ind] # Pick the wave function set corresponding to the lowest energy
     return eps_min, u, E
 
-def calc_Vxc_and_epsxc(r):
+def calc_Vxc_and_epsxc(r): # To be used in task 5
     A, B, C, D = 0.0311, -0.048, 0.0020, -0.0116
     gamma, beta1, beta2 = -0.1423, 1.0529, 0.3334
     # ec = []

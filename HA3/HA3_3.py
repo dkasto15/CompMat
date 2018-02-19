@@ -30,7 +30,7 @@ def main():
     # V_hartree = 1/r - (1 + 1/r)*np.exp(-2*r) # The hartree potential for hydrogen
     phi_s_H = (1 / np.sqrt(np.pi)) * np.exp(-r)  # Wave function for hydrogen in hartree
     # f = np.sqrt(4*np.pi)*phi_s_H*r
-    n_s_H = phi_s_H * phi_s_H  # Electron density hydrogen ground state
+    n_s_H = phi_s_H * phi_s_H  # Radial density hydrogen ground state
 
     ''' Initial conditions for U '''
     # R_U = np.zeros(np.size(r))
@@ -48,7 +48,7 @@ def main():
     V_H = 0
     V_x = 0
     V_c = 0
-    A = (-1 / 2.0) * A_dd - I * (Z / r) - V_H - V_x - V_c
+    A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_x + V_c
     (energy, wave_functions) = sparse.linalg.eigs(A, which='SM')  # SM = smallest
     # magnitude of the eigenvectors
     e_min_ind = np.argmin(energy)  # index of lowest energy in the energy vector
@@ -65,8 +65,8 @@ def main():
         + str(np.round(np.real(energy_min), 6)) + ' atomic units'
     label2 = 'Theoretical radial electron density. \n Energy: ' \
         + str(-0.5) + ' atomic units'
-    ax_potential.plot(r, 2 * phi_min**2, label=label1)
-    ax_potential.plot(r, 2 * 4 * np.pi * r**2 * phi_s_H**2, '--', label=label2)
+    ax_potential.plot(r, phi_min**2, label=label1)
+    ax_potential.plot(r, 4 * np.pi * r**2 * phi_s_H**2, '--', label=label2)
     ax_potential.set_xlabel('Radius [a.u.]')
     ax_potential.set_ylabel('Electron density  [a.u.]')
     ax_potential.set_title('Electron density for simulated ground state helium\n' +
