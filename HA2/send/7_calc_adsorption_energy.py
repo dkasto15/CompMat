@@ -45,7 +45,13 @@ for i, slab in enumerate(surfaces):
     slab.center(axis=2)
 
     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=2, position='ontop')
+                  height=1.985, position='ontop')
+    # if miller_indices[i] == '100':
+    #     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
+    #               height=1.981925, position='ontop')
+    # if miller_indices[i] == '111':
+    #     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
+    #               height=1.989563, position='ontop')
 
     write('slab' + miller_indices[i] + '.png', slab, rotation='10z,-80x')
     # Initialize new calculator that only considers k-space in xy-plane,
@@ -55,7 +61,7 @@ for i, slab in enumerate(surfaces):
                 xc='PBE',  # XC-functional
                 mixer=mixer,
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
-                txt='simulate_surface_Al_7_GPAW.txt')  # name of GPAW output text file
+                txt='simulate_surface_Al_7_GPAW_' + str(miller_indices[i]) + '.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
 
