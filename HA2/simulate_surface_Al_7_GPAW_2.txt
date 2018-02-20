@@ -5,10 +5,10 @@
  |__ |  _|___|_____|  1.3.0
  |___|_|             
 
-User:   kasto@hebbe31-7
-Date:   Mon Feb 19 23:23:00 2018
+User:   kasto@hebbe21-7
+Date:   Tue Feb 20 00:23:37 2018
 Arch:   x86_64
-Pid:    9378
+Pid:    3437
 Python: 2.7.14
 gpaw:   /apps/Hebbe/software/MPI/intel/2017.4.196-GCC-6.4.0-2.28/impi/2017.3.196/GPAW/1.3.0-Python-2.7.14/lib/python2.7/site-packages/gpaw
 _gpaw:  /apps/Hebbe/software/MPI/intel/2017.4.196-GCC-6.4.0-2.28/impi/2017.3.196/GPAW/1.3.0-Python-2.7.14/bin/
@@ -29,10 +29,6 @@ Input parameters:
           weight: 50.0}
   mode: {ecut: 350.0,
          name: pw}
-  poissonsolver: {eps: 1e-12,
-                  name: fd,
-                  nn: 3,
-                  relax: J}
   xc: PBE
 
 System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms 
@@ -109,32 +105,35 @@ Convergence criteria:
   Maximum integral of absolute eigenstate change: 4e-08 eV^2
   Maximum number of iterations: 333
 
-Symmetries present (total): 6
+Symmetries present (total): 8
 
-  ( 1  0  0)  ( 1 -1  0)  ( 0  1  0)  ( 0 -1  0)  (-1  1  0)  (-1  0  0)
-  ( 0  1  0)  ( 0 -1  0)  ( 1  0  0)  ( 1 -1  0)  (-1  0  0)  (-1  1  0)
+  ( 1  0  0)  ( 1  0  0)  ( 0  1  0)  ( 0  1  0)  ( 0 -1  0)  ( 0 -1  0)
+  ( 0  1  0)  ( 0 -1  0)  ( 1  0  0)  (-1  0  0)  ( 1  0  0)  (-1  0  0)
   ( 0  0  1)  ( 0  0  1)  ( 0  0  1)  ( 0  0  1)  ( 0  0  1)  ( 0  0  1)
-Note: your k-points are not as symmetric as your crystal!
+
+  (-1  0  0)  (-1  0  0)
+  ( 0  1  0)  ( 0 -1  0)
+  ( 0  0  1)  ( 0  0  1)
 
 256 k-points: 16 x 16 x 1 Monkhorst-Pack grid
-72 k-points in the irreducible part of the Brillouin zone
+36 k-points in the irreducible part of the Brillouin zone
        k-points in crystal coordinates                weights
-   0:     0.03125000   -0.03125000    0.00000000          2/256
-   1:     0.03125000    0.03125000    0.00000000          2/256
-   2:     0.09375000   -0.09375000    0.00000000          2/256
-   3:     0.09375000   -0.03125000    0.00000000          4/256
-   4:     0.09375000    0.03125000    0.00000000          4/256
-   5:     0.09375000    0.09375000    0.00000000          2/256
-   6:     0.15625000   -0.15625000    0.00000000          2/256
-   7:     0.15625000   -0.09375000    0.00000000          4/256
-   8:     0.15625000   -0.03125000    0.00000000          4/256
-   9:     0.15625000    0.03125000    0.00000000          4/256
+   0:     0.03125000    0.03125000    0.00000000          4/256
+   1:     0.09375000    0.03125000    0.00000000          8/256
+   2:     0.09375000    0.09375000    0.00000000          4/256
+   3:     0.15625000    0.03125000    0.00000000          8/256
+   4:     0.15625000    0.09375000    0.00000000          8/256
+   5:     0.15625000    0.15625000    0.00000000          4/256
+   6:     0.21875000    0.03125000    0.00000000          8/256
+   7:     0.21875000    0.09375000    0.00000000          8/256
+   8:     0.21875000    0.15625000    0.00000000          8/256
+   9:     0.21875000    0.21875000    0.00000000          4/256
           ...
-  71:     0.46875000    0.46875000    0.00000000          2/256
+  35:     0.46875000    0.46875000    0.00000000          4/256
 
 Wave functions: Plane wave expansion
   Cutoff energy: 350.000 eV
-  Number of coefficients (min, max): 6282, 6517
+  Number of coefficients (min, max): 6738, 6902
   Using FFTW library
   Eigensolver: None  MatrixOperator buffer_size: default value or 
                               see value of nblock in input file
@@ -143,8 +142,8 @@ Diagonalizer layout: Serial LAPACKOrthonormalizer layout: Serial LAPACK
 Davidson(niter=1, smin=None, normalize=True) 
 
 Densities:
-  Coarse grid: 14*14*336 grid
-  Fine grid: 28*28*672 grid
+  Coarse grid: 16*16*315 grid
+  Fine grid: 32*32*630 grid
   Total Charge: 0.000000 
 
 Density mixing:
@@ -155,24 +154,29 @@ Density mixing:
   Damping of long wave oscillations: 50 
 
 Hamiltonian:
-  XC and Coulomb potentials evaluated on a 28*28*672 grid
+  XC and Coulomb potentials evaluated on a 32*32*630 grid
   Using the PBE Exchange-Correlation functional
  
 
 Memory estimate:
-  Process memory now: 109.71 MiB
-Attribute error: AttributeError("'NoneType' object has no attribute 'bytecount'",)
-Some object probably lacks estimate_memory() method
-Memory breakdown may be incomplete
-  Calculator: 41.37 MiB
-    Density: 32.83 MiB
-      Arrays: 13.06 MiB
-      Localized functions: 14.75 MiB
-      Mixer: 5.02 MiB
-    Hamiltonian: 8.54 MiB
-      Arrays: 8.54 MiB
+  Process memory now: 115.00 MiB
+  Calculator: 83.10 MiB
+    Density: 45.94 MiB
+      Arrays: 16.00 MiB
+      Localized functions: 23.79 MiB
+      Mixer: 6.15 MiB
+    Hamiltonian: 11.10 MiB
+      Arrays: 10.46 MiB
       XC: 0.00 MiB
       Poisson: 0.00 MiB
+      vbar: 0.64 MiB
+    Wavefunctions: 26.06 MiB
+      Arrays psit_nG: 6.74 MiB
+      Eigensolver: 7.89 MiB
+      Projections: 0.20 MiB
+      Projectors: 1.26 MiB
+      Overlap op: 6.80 MiB
+      PW-descriptor: 3.16 MiB
 
 Total number of cores used: 20
 Parallelization over k-points: 20

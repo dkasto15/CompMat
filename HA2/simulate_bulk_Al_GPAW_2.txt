@@ -5,10 +5,10 @@
  |__ |  _|___|_____|  1.3.0
  |___|_|             
 
-User:   analbin@hebbe11-8
-Date:   Sat Feb 17 13:07:05 2018
+User:   kasto@hebbe03-1
+Date:   Sat Feb 17 13:07:08 2018
 Arch:   x86_64
-Pid:    8991
+Pid:    24320
 Python: 2.7.14
 gpaw:   /apps/Hebbe/software/MPI/intel/2017.4.196-GCC-6.4.0-2.28/impi/2017.3.196/GPAW/1.3.0-Python-2.7.14/lib/python2.7/site-packages/gpaw
 _gpaw:  /apps/Hebbe/software/MPI/intel/2017.4.196-GCC-6.4.0-2.28/impi/2017.3.196/GPAW/1.3.0-Python-2.7.14/bin/
@@ -146,7 +146,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 75.37 MiB
+  Process memory now: 75.57 MiB
   Calculator: 2.72 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -207,18 +207,18 @@ Effective grid spacing dv^(1/3) = 0.1786
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:06  +1.65   +inf    -3.689652    2             
-iter:   2  13:07:06  -0.21   +inf    -3.717533    3             
-iter:   3  13:07:06  -1.71   +inf    -3.718847    2             
-iter:   4  13:07:06  -2.54  -0.93    -3.719453    2             
-iter:   5  13:07:07  -1.70  -0.98    -3.723379    3             
-iter:   6  13:07:07  -2.88  -2.41    -3.723483    2             
-iter:   7  13:07:07  -3.17  -2.49    -3.723573    2             
-iter:   8  13:07:07  -3.96  -2.19    -3.723544    2             
-iter:   9  13:07:07  -5.39  -3.19    -3.723543    2             
-iter:  10  13:07:07  -5.65  -3.63    -3.723543    2             
-iter:  11  13:07:07  -6.27  -3.48    -3.723543    1             
-iter:  12  13:07:08  -7.55  -4.17    -3.723543    1             
+iter:   1  13:07:10  +1.65   +inf    -3.689652    2             
+iter:   2  13:07:10  -0.21   +inf    -3.717533    3             
+iter:   3  13:07:10  -1.71   +inf    -3.718847    2             
+iter:   4  13:07:10  -2.54  -0.93    -3.719453    2             
+iter:   5  13:07:10  -1.70  -0.98    -3.723379    3             
+iter:   6  13:07:10  -2.88  -2.41    -3.723483    2             
+iter:   7  13:07:11  -3.17  -2.49    -3.723573    2             
+iter:   8  13:07:11  -3.96  -2.19    -3.723544    2             
+iter:   9  13:07:11  -5.39  -3.19    -3.723543    2             
+iter:  10  13:07:11  -5.65  -3.63    -3.723543    2             
+iter:  11  13:07:11  -6.27  -3.48    -3.723543    1             
+iter:  12  13:07:11  -7.55  -4.17    -3.723543    1             
 
 Converged after 12 iterations.
 
@@ -364,7 +364,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 87.22 MiB
+  Process memory now: 87.42 MiB
   Calculator: 2.74 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -425,18 +425,18 @@ Effective grid spacing dv^(1/3) = 0.1798
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:09  +1.64   +inf    -3.699405    2             
-iter:   2  13:07:09  -0.22   +inf    -3.727116    3             
-iter:   3  13:07:09  -1.71   +inf    -3.728446    2             
-iter:   4  13:07:09  -2.55  -0.93    -3.728769    2             
-iter:   5  13:07:09  -1.73  -0.98    -3.731301    3             
-iter:   6  13:07:10  -2.93  -2.42    -3.731397    1             
-iter:   7  13:07:10  -3.13  -2.49    -3.731489    2             
-iter:   8  13:07:10  -3.90  -2.14    -3.731459    2             
-iter:   9  13:07:10  -5.34  -3.19    -3.731458    2             
-iter:  10  13:07:10  -5.69  -3.67    -3.731458    2             
-iter:  11  13:07:10  -6.32  -3.51    -3.731458    1             
-iter:  12  13:07:10  -7.55  -4.21    -3.731458    1             
+iter:   1  13:07:13  +1.64   +inf    -3.699405    2             
+iter:   2  13:07:13  -0.22   +inf    -3.727116    3             
+iter:   3  13:07:13  -1.71   +inf    -3.728446    2             
+iter:   4  13:07:13  -2.55  -0.93    -3.728769    2             
+iter:   5  13:07:13  -1.73  -0.98    -3.731301    3             
+iter:   6  13:07:13  -2.93  -2.42    -3.731397    1             
+iter:   7  13:07:13  -3.13  -2.49    -3.731489    2             
+iter:   8  13:07:14  -3.90  -2.14    -3.731459    2             
+iter:   9  13:07:14  -5.34  -3.19    -3.731458    2             
+iter:  10  13:07:14  -5.69  -3.67    -3.731458    2             
+iter:  11  13:07:14  -6.32  -3.51    -3.731458    1             
+iter:  12  13:07:14  -7.55  -4.21    -3.731458    1             
 
 Converged after 12 iterations.
 
@@ -582,7 +582,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 88.62 MiB
+  Process memory now: 88.84 MiB
   Calculator: 2.76 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -643,18 +643,18 @@ Effective grid spacing dv^(1/3) = 0.1810
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:12  +1.63   +inf    -3.705489    2             
-iter:   2  13:07:12  -0.23   +inf    -3.732976    3             
-iter:   3  13:07:12  -1.71   +inf    -3.734320    2             
-iter:   4  13:07:12  -2.55  -0.93    -3.734371    2             
-iter:   5  13:07:12  -1.75  -0.98    -3.735579    3             
-iter:   6  13:07:12  -2.98  -2.42    -3.735667    1             
-iter:   7  13:07:12  -3.10  -2.49    -3.735758    2             
-iter:   8  13:07:13  -3.86  -2.10    -3.735727    2             
-iter:   9  13:07:13  -5.31  -3.23    -3.735727    2             
-iter:  10  13:07:13  -5.75  -3.72    -3.735727    2             
-iter:  11  13:07:13  -6.39  -3.57    -3.735727    2             
-iter:  12  13:07:13  -7.59  -4.30    -3.735727    1             
+iter:   1  13:07:16  +1.63   +inf    -3.705489    2             
+iter:   2  13:07:16  -0.23   +inf    -3.732976    3             
+iter:   3  13:07:16  -1.71   +inf    -3.734320    2             
+iter:   4  13:07:16  -2.55  -0.93    -3.734371    2             
+iter:   5  13:07:16  -1.75  -0.98    -3.735579    3             
+iter:   6  13:07:16  -2.98  -2.42    -3.735667    1             
+iter:   7  13:07:16  -3.10  -2.49    -3.735758    2             
+iter:   8  13:07:16  -3.86  -2.10    -3.735727    2             
+iter:   9  13:07:16  -5.31  -3.23    -3.735727    2             
+iter:  10  13:07:17  -5.75  -3.72    -3.735727    2             
+iter:  11  13:07:17  -6.39  -3.57    -3.735727    2             
+iter:  12  13:07:17  -7.59  -4.30    -3.735727    1             
 
 Converged after 12 iterations.
 
@@ -800,7 +800,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 89.75 MiB
+  Process memory now: 89.94 MiB
   Calculator: 2.78 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -861,18 +861,18 @@ Effective grid spacing dv^(1/3) = 0.1822
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:15  +1.61   +inf    -3.708149    3             
-iter:   2  13:07:15  -0.24   +inf    -3.735357    3             
-iter:   3  13:07:15  -1.71   +inf    -3.736712    2             
-iter:   4  13:07:15  -2.56  -0.93    -3.736503    2             
-iter:   5  13:07:15  -1.78  -0.98    -3.736457    3             
-iter:   6  13:07:15  -3.02  -2.43    -3.736537    1             
-iter:   7  13:07:15  -3.10  -2.49    -3.736624    2             
-iter:   8  13:07:15  -3.84  -2.07    -3.736592    2             
-iter:   9  13:07:16  -5.30  -3.29    -3.736592    2             
-iter:  10  13:07:16  -5.82  -3.77    -3.736592    2             
-iter:  11  13:07:16  -6.50  -3.64    -3.736593    2             
-iter:  12  13:07:16  -7.69  -4.50    -3.736593    1             
+iter:   1  13:07:18  +1.61   +inf    -3.708149    3             
+iter:   2  13:07:18  -0.24   +inf    -3.735357    3             
+iter:   3  13:07:18  -1.71   +inf    -3.736712    2             
+iter:   4  13:07:19  -2.56  -0.93    -3.736503    2             
+iter:   5  13:07:19  -1.78  -0.98    -3.736457    3             
+iter:   6  13:07:19  -3.02  -2.43    -3.736537    1             
+iter:   7  13:07:19  -3.10  -2.49    -3.736624    2             
+iter:   8  13:07:19  -3.84  -2.07    -3.736592    2             
+iter:   9  13:07:19  -5.30  -3.29    -3.736592    2             
+iter:  10  13:07:19  -5.82  -3.77    -3.736592    2             
+iter:  11  13:07:20  -6.50  -3.64    -3.736593    2             
+iter:  12  13:07:20  -7.69  -4.50    -3.736593    1             
 
 Converged after 12 iterations.
 
@@ -1018,7 +1018,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 91.66 MiB
+  Process memory now: 91.53 MiB
   Calculator: 2.81 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -1079,18 +1079,18 @@ Effective grid spacing dv^(1/3) = 0.1835
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:17  +1.60   +inf    -3.707603    3             
-iter:   2  13:07:17  -0.24   +inf    -3.734488    3             
-iter:   3  13:07:17  -1.71   +inf    -3.735852    2             
-iter:   4  13:07:18  -2.57  -0.93    -3.735394    2             
-iter:   5  13:07:18  -1.80  -0.98    -3.734162    3             
-iter:   6  13:07:18  -3.07  -2.43    -3.734233    1             
-iter:   7  13:07:18  -3.13  -2.48    -3.734316    2             
-iter:   8  13:07:18  -3.85  -2.06    -3.734284    2             
-iter:   9  13:07:18  -5.31  -3.40    -3.734284    2             
-iter:  10  13:07:18  -5.86  -3.80    -3.734284    2             
-iter:  11  13:07:19  -6.62  -3.69    -3.734284    2             
-iter:  12  13:07:19  -7.81  -4.83    -3.734284    1             
+iter:   1  13:07:21  +1.60   +inf    -3.707603    3             
+iter:   2  13:07:21  -0.24   +inf    -3.734488    3             
+iter:   3  13:07:21  -1.71   +inf    -3.735852    2             
+iter:   4  13:07:21  -2.57  -0.93    -3.735394    2             
+iter:   5  13:07:22  -1.80  -0.98    -3.734162    3             
+iter:   6  13:07:22  -3.07  -2.43    -3.734233    1             
+iter:   7  13:07:22  -3.13  -2.48    -3.734316    2             
+iter:   8  13:07:22  -3.85  -2.06    -3.734284    2             
+iter:   9  13:07:22  -5.31  -3.40    -3.734284    2             
+iter:  10  13:07:22  -5.86  -3.80    -3.734284    2             
+iter:  11  13:07:22  -6.62  -3.69    -3.734284    2             
+iter:  12  13:07:23  -7.81  -4.83    -3.734284    1             
 
 Converged after 12 iterations.
 
@@ -1236,7 +1236,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 91.76 MiB
+  Process memory now: 91.60 MiB
   Calculator: 2.83 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -1297,18 +1297,18 @@ Effective grid spacing dv^(1/3) = 0.1847
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:20  +1.58   +inf    -3.704056    2             
-iter:   2  13:07:20  -0.26   +inf    -3.730589    3             
-iter:   3  13:07:20  -1.70   +inf    -3.731960    2             
-iter:   4  13:07:20  -2.57  -0.93    -3.731267    2             
-iter:   5  13:07:21  -1.81  -0.97    -3.728915    3             
-iter:   6  13:07:21  -3.11  -2.43    -3.728977    1             
-iter:   7  13:07:21  -3.18  -2.48    -3.729054    2             
-iter:   8  13:07:21  -3.88  -2.06    -3.729022    2             
-iter:   9  13:07:21  -5.33  -3.53    -3.729022    2             
-iter:  10  13:07:21  -5.87  -3.84    -3.729022    2             
-iter:  11  13:07:21  -6.62  -3.66    -3.729022    1             
-iter:  12  13:07:22  -7.83  -4.86    -3.729022    1             
+iter:   1  13:07:24  +1.58   +inf    -3.704056    2             
+iter:   2  13:07:24  -0.26   +inf    -3.730589    3             
+iter:   3  13:07:24  -1.70   +inf    -3.731960    2             
+iter:   4  13:07:24  -2.57  -0.93    -3.731267    2             
+iter:   5  13:07:24  -1.81  -0.97    -3.728915    3             
+iter:   6  13:07:25  -3.11  -2.43    -3.728977    1             
+iter:   7  13:07:25  -3.18  -2.48    -3.729054    2             
+iter:   8  13:07:25  -3.88  -2.06    -3.729022    2             
+iter:   9  13:07:25  -5.33  -3.53    -3.729022    2             
+iter:  10  13:07:25  -5.87  -3.84    -3.729022    2             
+iter:  11  13:07:25  -6.62  -3.66    -3.729022    1             
+iter:  12  13:07:25  -7.83  -4.86    -3.729022    1             
 
 Converged after 12 iterations.
 
@@ -1454,7 +1454,7 @@ Hamiltonian:
  
 
 Memory estimate:
-  Process memory now: 91.81 MiB
+  Process memory now: 91.64 MiB
   Calculator: 2.84 MiB
     Density: 1.13 MiB
       Arrays: 0.54 MiB
@@ -1515,19 +1515,19 @@ Effective grid spacing dv^(1/3) = 0.1859
 
                      log10-error:    total        iterations:
            time      wfs    density  energy       fermi  poisson
-iter:   1  13:07:23  +1.57   +inf    -3.697711    2             
-iter:   2  13:07:23  -0.27   +inf    -3.723872    3             
-iter:   3  13:07:23  -1.70   +inf    -3.725249    2             
-iter:   4  13:07:23  -2.58  -0.93    -3.724331    2             
-iter:   5  13:07:23  -1.83  -0.97    -3.720926    3             
-iter:   6  13:07:23  -3.16  -2.43    -3.720980    1             
-iter:   7  13:07:24  -3.27  -2.48    -3.721050    2             
-iter:   8  13:07:24  -3.96  -2.09    -3.721018    2             
-iter:   9  13:07:24  -5.32  -3.67    -3.721018    2             
-iter:  10  13:07:24  -5.93  -3.73    -3.721018    2             
-iter:  11  13:07:24  -6.53  -3.63    -3.721018    1             
-iter:  12  13:07:24  -7.37  -4.37    -3.721018    2             
-iter:  13  13:07:24  -7.48  -4.21    -3.721018    2             
+iter:   1  13:07:27  +1.57   +inf    -3.697711    2             
+iter:   2  13:07:27  -0.27   +inf    -3.723872    3             
+iter:   3  13:07:27  -1.70   +inf    -3.725249    2             
+iter:   4  13:07:27  -2.58  -0.93    -3.724331    2             
+iter:   5  13:07:27  -1.83  -0.97    -3.720926    3             
+iter:   6  13:07:27  -3.16  -2.43    -3.720980    1             
+iter:   7  13:07:27  -3.27  -2.48    -3.721050    2             
+iter:   8  13:07:28  -3.96  -2.09    -3.721018    2             
+iter:   9  13:07:28  -5.32  -3.67    -3.721018    2             
+iter:  10  13:07:28  -5.93  -3.73    -3.721018    2             
+iter:  11  13:07:28  -6.53  -3.63    -3.721018    1             
+iter:  12  13:07:28  -7.37  -4.37    -3.721018    2             
+iter:  13  13:07:28  -7.48  -4.21    -3.721018    2             
 
 Converged after 13 iterations.
 
@@ -1560,62 +1560,62 @@ Warning: Showing only first 2 kpts
 
 Timing:                              incl.     excl.
 -----------------------------------------------------------
-Hamiltonian:                         0.504     0.002   0.0% |
- Atomic:                             0.361     0.361   1.7% ||
+Hamiltonian:                         0.499     0.002   0.0% |
+ Atomic:                             0.366     0.365   1.7% ||
   XC Correction:                     0.000     0.000   0.0% |
- Calculate atomic Hamiltonians:      0.039     0.039   0.2% |
+ Calculate atomic Hamiltonians:      0.029     0.029   0.1% |
  Communicate:                        0.000     0.000   0.0% |
  Initialize Hamiltonian:             0.000     0.000   0.0% |
  Poisson:                            0.001     0.001   0.0% |
  XC 3D grid:                         0.100     0.100   0.5% |
-LCAO initialization:                 1.967     0.143   0.7% |
- LCAO eigensolver:                   0.608     0.005   0.0% |
+LCAO initialization:                 2.020     0.142   0.7% |
+ LCAO eigensolver:                   0.618     0.006   0.0% |
   Calculate projections:             0.002     0.002   0.0% |
   DenseAtomicCorrection:             0.011     0.011   0.1% |
-  Distribute overlap matrix:         0.002     0.002   0.0% |
-  Orbital Layouts:                   0.008     0.008   0.0% |
-  Potential matrix:                  0.369     0.369   1.8% ||
-  Sum over cells:                    0.210     0.210   1.0% |
- LCAO to grid:                       0.302     0.302   1.5% ||
- Set positions (LCAO WFS):           0.914     0.001   0.0% |
+  Distribute overlap matrix:         0.003     0.003   0.0% |
+  Orbital Layouts:                   0.009     0.009   0.0% |
+  Potential matrix:                  0.368     0.368   1.7% ||
+  Sum over cells:                    0.220     0.220   1.0% |
+ LCAO to grid:                       0.307     0.307   1.4% ||
+ Set positions (LCAO WFS):           0.953     0.001   0.0% |
   Basic WFS set positions:           0.012     0.012   0.1% |
   Basis functions set positions:     0.000     0.000   0.0% |
-  TCI: Calculate S, T, P:            0.901     0.901   4.4% |-|
-PWDescriptor:                        0.026     0.026   0.1% |
-SCF-cycle:                          10.696     1.125   5.4% |-|
- Davidson:                           2.905     1.694   8.2% |--|
-  calc. matrices:                    0.942     0.942   4.6% |-|
+  TCI: Calculate S, T, P:            0.940     0.940   4.4% |-|
+PWDescriptor:                        0.044     0.044   0.2% |
+SCF-cycle:                          10.740     0.972   4.5% |-|
+ Davidson:                           3.005     1.739   8.1% |--|
+  calc. matrices:                    0.993     0.993   4.6% |-|
   diagonalize:                       0.097     0.097   0.5% |
-  rotate_psi:                        0.172     0.172   0.8% |
- Density:                            1.326     0.001   0.0% |
+  rotate_psi:                        0.176     0.176   0.8% |
+ Density:                            1.331     0.001   0.0% |
   Atomic density matrices:           0.069     0.069   0.3% |
   Mix:                               0.176     0.176   0.8% |
   Multipole moments:                 0.006     0.006   0.0% |
-  Pseudo density:                    1.074     0.515   2.5% ||
-   Symmetrize density:               0.559     0.559   2.7% ||
- Hamiltonian:                        4.271     0.020   0.1% |
-  Atomic:                            3.307     3.307  16.0% |-----|
+  Pseudo density:                    1.079     0.519   2.4% ||
+   Symmetrize density:               0.559     0.559   2.6% ||
+ Hamiltonian:                        4.321     0.020   0.1% |
+  Atomic:                            3.354     3.354  15.6% |-----|
    XC Correction:                    0.000     0.000   0.0% |
-  Calculate atomic Hamiltonians:     0.054     0.054   0.3% |
-  Communicate:                       0.004     0.004   0.0% |
-  Poisson:                           0.008     0.008   0.0% |
-  XC 3D grid:                        0.877     0.877   4.2% |-|
- Orthonormalize:                     0.051     0.004   0.0% |
+  Calculate atomic Hamiltonians:     0.058     0.058   0.3% |
+  Communicate:                       0.005     0.005   0.0% |
+  Poisson:                           0.009     0.009   0.0% |
+  XC 3D grid:                        0.875     0.875   4.1% |-|
+ Orthonormalize:                     0.052     0.004   0.0% |
   Band Layouts:                      0.003     0.001   0.0% |
    Inverse Cholesky:                 0.002     0.002   0.0% |
-  calc_s_matrix:                     0.007     0.007   0.0% |
-  projections:                       0.030     0.030   0.1% |
+  calc_s_matrix:                     0.008     0.008   0.0% |
+  projections:                       0.031     0.031   0.1% |
   rotate_psi:                        0.007     0.007   0.0% |
- Subspace diag:                      1.018     0.079   0.4% |
-  Band Layouts:                      0.080     0.018   0.1% |
+ Subspace diag:                      1.058     0.081   0.4% |
+  Band Layouts:                      0.082     0.018   0.1% |
    Diagonalize:                      0.048     0.048   0.2% |
    Distribute results:               0.015     0.015   0.1% |
-  calc_h_matrix:                     0.722     0.722   3.5% ||
-  rotate_psi:                        0.137     0.137   0.7% |
-Set symmetry:                        3.197     3.197  15.5% |-----|
-Other:                               4.302     4.302  20.8% |-------|
+  calc_h_matrix:                     0.756     0.756   3.5% ||
+  rotate_psi:                        0.140     0.140   0.7% |
+Set symmetry:                        3.301     3.301  15.4% |-----|
+Other:                               4.868     4.868  22.7% |--------|
 -----------------------------------------------------------
-Total:                                        20.691 100.0%
+Total:                                        21.473 100.0%
 
-Memory usage: 126.01 MiB
-Date: Sat Feb 17 13:07:25 2018
+Memory usage: 126.18 MiB
+Date: Sat Feb 17 13:07:30 2018

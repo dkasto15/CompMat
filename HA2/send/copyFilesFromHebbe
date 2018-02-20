@@ -1,7 +1,9 @@
 #!/bin/bash
 # chmod 755 copyFilesFromHebbe
 
-scp kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/bulk/*.txt \
+# scp kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/bulk/*.txt \
+# ~/Google\ Drive/Skola/Chalmers/CompMat/HA2
+scp kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/*.txt \
 ~/Google\ Drive/Skola/Chalmers/CompMat/HA2
 # scp kasto@hebbe.c3se.chalmers.se:~/TIF035/HA2/sigmaSurface.txt \
 # ~/Google\ Drive/Skola/Chalmers/CompMat/HA2
