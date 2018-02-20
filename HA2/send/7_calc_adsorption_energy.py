@@ -26,14 +26,14 @@ energy_cutoff = 350
 mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
 
 surfaces = []
-surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
 surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
-miller_indices = ['100', '111']
+surfaces.append(fcc100('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
+miller_indices = ['111', '100']
 
 d_CO = 1.128  # CO bondlength in [Å]
-CO_adsorbate = Atoms('CO')
+CO_adsorbate = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
 
-energy_pot = []
+energies = []
 sigmas = []
 areas = []
 
@@ -55,7 +55,7 @@ for i, slab in enumerate(surfaces):
                 xc='PBE',  # XC-functional
                 mixer=mixer,
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
-                txt='simulate_surface_Al_7_GPAW_2.txt')  # name of GPAW output text file
+                txt='simulate_surface_Al_7_GPAW.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
 
