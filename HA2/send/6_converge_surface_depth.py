@@ -14,7 +14,7 @@ N_x = 1
 N_y = 1
 N_z_vec = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
-mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for clusters
 
 n_k_points = 16
 energy_cutoff = 350

@@ -38,14 +38,14 @@ sigmas = []
 areas = []
 
 for i, slab in enumerate(surfaces):
-    cell = slab.get_cell()  # Unit cell object of the Al FCC 111
+    cell = slab.get_cell()  # Unit cell object
     area = np.linalg.norm(np.cross(cell[0], cell[1]))  # Calc. surface area
     areas.append(area)
 
     slab.center(axis=2)
 
     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=1.985, position='ontop')
+                  height=2, position='ontop')
     # if miller_indices[i] == '100':
     #     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
     #               height=1.981925, position='ontop')
@@ -82,11 +82,30 @@ for i, slab in enumerate(surfaces):
     energies.append(energy_slab)
     sigmas.append((1 / (2.0 * area)) * (energy_slab - N_z * energy_bulk))
 
+''' Calculate energy for CO molecule in vacuum '''
+CO = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
+CO.set_cell([5, 5, 5])
+CO.center()
+
+mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+
+cutoff_energy = 600
+
+calc = GPAW(mode=PW(cutoff_energy),  # use the LCAO basis mode
+            h=0.18,  # grid spacing
+            xc='PBE',  # XC-functional
+            mixer=mixer,
+            txt='calc_CO_energy_GPAW.txt') # name of GPAW output text file
+
+CO.set_calculator(calc)
+energy_CO = CO.get_potential_energy()
+
 file_simulation_parameters.close()
 with open(homedir + '/TIF035/HA2/surface/7_calc_adsorbtion_energy.txt', 'w') as textfile:
-    textfile.write('miller_index, area, bulk_energy, surface_energy_density\n')
+    textfile.write('miller_index, area, bulk_energy, surface_energy_density, CO_energy,\n')
     for i in range(len(surfaces)):
         textfile.write(str(miller_indices[i]) + ',' +
                        str(areas[i]) + ',' +
                        str(energies[i]) + ',' +
-                       str(sigmas[i]) + '\n')
+                       str(sigmas[i]) + ',' +
+                       str(CO_energy) + '\n')
