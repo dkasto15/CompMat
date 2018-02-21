@@ -13,7 +13,7 @@ from gpaw.poisson import PoissonSolver
 import os
 
 homedir = os.path.expanduser('~')
-file_simulation_parameters = open('7_simulation_params.txt', 'w')
+file_simulation_parameters = open('9_simulation_params.txt', 'w')
 lattice_parameter = 4.04358928739
 energy_bulk = -3.73707160907
 
@@ -44,8 +44,9 @@ for i, slab in enumerate(surfaces):
 
     slab.center(axis=2)
 
+    ads_mode = 'ontop' #'bridge', 'hollow'
     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=2, position='ontop')
+                  height=2, position=ads_mode)
     # if miller_indices[i] == '100':
     #     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
     #               height=1.981925, position='ontop')
@@ -61,7 +62,7 @@ for i, slab in enumerate(surfaces):
                 xc='PBE',  # XC-functional
                 mixer=mixer,
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
-                txt='simulate_surface_Al_7_GPAW_' + str(miller_indices[i]) + '.txt')  # name of GPAW output text file
+                txt='simulate_surface_Al_9_GPAW_' + str(miller_indices[i]) + '.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
 
@@ -80,7 +81,7 @@ for i, slab in enumerate(surfaces):
 
     energy_slab = slab.get_potential_energy()
     energies.append(energy_slab)
-    sigmas.append((1 / area) * (energy_slab - N_z * energy_bulk))
+    sigmas.append((1 / (2 * area)) * (energy_slab - N_z * energy_bulk))
 
 ''' Calculate energy for CO molecule in vacuum '''
 CO = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
@@ -89,7 +90,7 @@ CO.center()
 
 mixer = Mixer(beta=0.25, nmaxold=3,	weight=1.0)  # Recommended values for small systems
 
-cutoff_energy = 600
+cutoff_energy = 700
 
 calc = GPAW(mode=PW(cutoff_energy),  # use the LCAO basis mode
             h=0.18,  # grid spacing
@@ -101,11 +102,11 @@ CO.set_calculator(calc)
 energy_CO = CO.get_potential_energy()
 
 file_simulation_parameters.close()
-with open(homedir + '/TIF035/HA2/surface/7_calc_adsorbtion_energy.txt', 'w') as textfile:
-    textfile.write('miller_index, area, bulk_energy, surface_energy_density, CO_energy,\n')
+with open(homedir + '/TIF035/HA2/surface/9_calc_adsorbtion_energy_' + ads_mode + '.txt', 'w') as textfile:
+    textfile.write('miller_index, area, slab_energy, surface_energy_density, CO_energy,\n')
     for i in range(len(surfaces)):
         textfile.write(str(miller_indices[i]) + ',' +
                        str(areas[i]) + ',' +
                        str(energies[i]) + ',' +
                        str(sigmas[i]) + ',' +
-                       str(CO_energy) + '\n')
+                       str(energy_CO) + '\n')

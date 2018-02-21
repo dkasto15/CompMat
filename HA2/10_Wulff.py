@@ -21,10 +21,10 @@ with open('HA2/' + filename1, 'r') as textfile:
     for line in textfile:
         line = line.split(',')
         if line[0] == '111':
-            sigma_ads_111 = float(line[3])
+            energy_slab_ads_111 = float(line[2])
             area_111 = float(line[1])
         if line[0] == '100':
-            sigma_ads_100 = float(line[3])
+            energy_slab_ads_100 = float(line[2])
             area_100 = float(line[1])
 
 with open('HA2/' + filename2, 'r') as textfile:
@@ -33,15 +33,13 @@ with open('HA2/' + filename2, 'r') as textfile:
         line = line.split(',')
         if line[0] == '111':
             sigma_111 = float(line[4])
+            energy_slab_111 = float(line[3])
         if line[0] == '100':
             sigma_100 = float(line[4])
+            energy_slab_100 = float(line[3])
 
-sigma_int_111 = sigma_111 + theta * (sigma_ads_111 - sigma_111 - E_CO / area_111)
-sigma_int_100 = sigma_100 + theta * (sigma_ads_100 - sigma_100 - E_CO / area_100)
-
-print(sigma_int_111)
-print(sigma_int_100)
-
+sigma_int_111 = sigma_111 + theta * ((energy_slab_ads_111 - energy_slab_111 - E_CO) / area_111)
+sigma_int_100 = sigma_100 + theta * ((energy_slab_ads_100 - energy_slab_100 - E_CO) / area_100)
 
 ''' Case: Just Al '''
 Al = wulff_construction('Al',
