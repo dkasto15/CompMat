@@ -17,7 +17,7 @@ CO = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
 CO.set_cell([5, 5, 5])
 CO.center()
 
-mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+mixer = Mixer(beta=0.25, nmaxold=3,	weight=1.0)  # Recommended values for small systems
 
 energies = []
 cutoff_energies = [100, 150, 200, 250, 300, 350, 400, 450, 500, 600]

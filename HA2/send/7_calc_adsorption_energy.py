@@ -23,7 +23,7 @@ N_z = 14
 n_k_points = 16
 energy_cutoff = 350
 
-mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for clusters
 
 surfaces = []
 surfaces.append(fcc111('Al', size=(N_x, N_y, N_z), a=lattice_parameter, vacuum=15))
@@ -80,14 +80,14 @@ for i, slab in enumerate(surfaces):
 
     energy_slab = slab.get_potential_energy()
     energies.append(energy_slab)
-    sigmas.append((1 / (2.0 * area)) * (energy_slab - N_z * energy_bulk))
+    sigmas.append((1 / area) * (energy_slab - N_z * energy_bulk))
 
 ''' Calculate energy for CO molecule in vacuum '''
 CO = Atoms('CO', positions=[(0., 0., 0.), (0., 0., d_CO)])
 CO.set_cell([5, 5, 5])
 CO.center()
 
-mixer = Mixer(beta=0.1,	nmaxold=5,	weight=50.0)  # Recommended values for small systems
+mixer = Mixer(beta=0.25, nmaxold=3,	weight=1.0)  # Recommended values for small systems
 
 cutoff_energy = 600
 
