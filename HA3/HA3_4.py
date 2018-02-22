@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import trapz
 import scipy.sparse as sparse
 import numpy.linalg as npl
+import scipy.linalg as spl
 from HA3_2 import create_second_derivative_matrix_1D
 from HA3_2 import compute_VsH_and_U
 
@@ -101,7 +102,7 @@ def main():
 def compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd):
     # (eig, wave) = sparse.linalg.eigs(A, which='SM')  # SM = smallest
     # # magnitude of the eigenvectors
-    (eig, wave) = npl.eig(A) # Find eigenvalues and eigenvectors to Kohn-Sham eq.
+    (eig, wave) = spl.eig(A) # Find eigenvalues and eigenvectors to Kohn-Sham eq.
     eig_vec = []
     wave_vec = []
     for ind, e in enumerate(eig): # Remove non-physical solutions (imag. eigenvalues)
