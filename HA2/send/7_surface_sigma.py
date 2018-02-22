@@ -48,8 +48,6 @@ for i, slab in enumerate(surfaces):
     energies.append(energy_slab)
     sigmas.append((1 / (2.0 * area)) * (energy_slab - N_z * energy_bulk))
 
-
-
 with open(homedir + '/TIF035/HA2/surface/7_surface_sigma.txt', 'w') as textfile:
     textfile.write('miller index, atom depth, area, bulk energy, surface energy density\n')
     for i in range(len(surfaces)):

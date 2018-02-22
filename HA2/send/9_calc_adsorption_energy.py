@@ -3,6 +3,7 @@
 import numpy as np
 from gpaw import GPAW, Mixer, PW
 from ase.build import *
+from gpaw.eigensolvers import Davidson
 from ase.parallel import rank
 from ase.build import fcc111, fcc100, add_adsorbate
 from ase import Atoms
@@ -44,9 +45,10 @@ for i, slab in enumerate(surfaces):
 
     slab.center(axis=2)
 
-    ads_mode = 'ontop' #'bridge', 'hollow'
+    ads_mode = 'bridge' #'ontop', bridge', 'hollow'
+    height = 1.9 # 2 for ontop
     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
-                  height=2, position=ads_mode)
+                  height=height, position=ads_mode)
     # if miller_indices[i] == '100':
     #     add_adsorbate(slab=slab, adsorbate=CO_adsorbate,
     #               height=1.981925, position='ontop')
@@ -62,6 +64,7 @@ for i, slab in enumerate(surfaces):
                 xc='PBE',  # XC-functional
                 mixer=mixer,
                 kpts=(n_k_points, n_k_points, 1),  # k-point grid
+                eigensolver=Davidson(niter=5),
                 txt='simulate_surface_Al_9_GPAW_' + str(miller_indices[i]) + '.txt')  # name of GPAW output text file
 
     slab.set_calculator(calc)
@@ -77,7 +80,7 @@ for i, slab in enumerate(surfaces):
     dyn = BFGS(slab,
                trajectory='relax_adsorbate_' + miller_indices[i] + '.traj',
                logfile='relax_adsorbate_' + miller_indices[i] + '.qn')
-    dyn.run(fmax=0.01)
+    dyn.run(fmax=0.05)
 
     energy_slab = slab.get_potential_energy()
     energies.append(energy_slab)
@@ -102,7 +105,7 @@ CO.set_calculator(calc)
 energy_CO = CO.get_potential_energy()
 
 file_simulation_parameters.close()
-with open(homedir + '/TIF035/HA2/surface/9_calc_adsorbtion_energy_' + ads_mode + '.txt', 'w') as textfile:
+with open(homedir + '/TIF035/HA2/surface/9_calc_adsorption_energy_' + ads_mode + '.txt', 'w') as textfile:
     textfile.write('miller_index, area, slab_energy, surface_energy_density, CO_energy,\n')
     for i in range(len(surfaces)):
         textfile.write(str(miller_indices[i]) + ',' +

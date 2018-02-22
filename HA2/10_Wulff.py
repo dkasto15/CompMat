@@ -7,10 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # input files
-filename1 = '7_calc_adsorbtion_energy.txt'
+filename1 = '9_calc_adsorption_energy_ontop.txt'
 filename2 = '7_surface_sigma.txt'
 
-E_CO = -13.9
 theta = 1/4
 
 # import and manage data
@@ -23,6 +22,7 @@ with open('HA2/' + filename1, 'r') as textfile:
         if line[0] == '111':
             energy_slab_ads_111 = float(line[2])
             area_111 = float(line[1])
+            E_CO = float(line[4])
         if line[0] == '100':
             energy_slab_ads_100 = float(line[2])
             area_100 = float(line[1])
@@ -51,7 +51,7 @@ Al = wulff_construction('Al',
                         rounding='below')  # Round to closest structure below size
 Al.center(vacuum=10)
 view(Al)
-
+# Angles x=-100 y=20 z=30
 ''' Case: Al + adsorbed CO '''
 Al_ads = wulff_construction('Al',
                             surfaces=[(1, 0, 0),

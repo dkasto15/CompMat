@@ -29,7 +29,7 @@ CO.center()
 mixer = Mixer(beta=0.25, nmaxold=3,	weight=1.0)  # Recommended values for small systems
 
 energies = []
-cutoff_energies = np.arange(300, 750, 50)
+cutoff_energies = np.arange(300, 900, 50)
 
 for cutoff_energy in cutoff_energies:
     if rank == 0:
