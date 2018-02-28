@@ -12,7 +12,7 @@ from scipy.sparse.linalg import spsolve
 
 def main():
     ''' Run task 4, 5 or 6? '''
-    task = 6
+    task = 5
 
     ''' Physical constants '''
     Z_helium = 2  # Charge of helium nucleus in hartree units
@@ -133,7 +133,7 @@ def compute_n(A, r):
 def calc_xc(n):
     ''' Exchange '''
     ex = -(3 / 4.0) * (3 * n / np.pi)**(1 / 3.0)
-    dex_dn = -(1 / 4.0) * (3 / np.pi)**(1 / 3.0) * n**(-2 / 3.0)
+    dex_dn = -(1 / 4.0) * (3 / np.pi)**(1 / 3.0) / n**(2 / 3.0)
     V_x = ex + n * dex_dn
     ''' Correlation '''
     A, B, C, D = 0.0311, -0.048, 0.0020, -0.0116
