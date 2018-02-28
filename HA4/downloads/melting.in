@@ -1,0 +1,76 @@
+dimension       3
+boundary        p p p
+units           metal
+
+atom_style	atomic
+neighbor	0.3 bin
+neigh_modify	every 10 delay 0 check no
+
+# Number of steps for the equilibration steps
+variable        eqsteps equal 50000
+
+# Number of steps to run our NPH simulation
+variable        simsteps equal 200000
+
+# Our trial melting temperature
+variable	T equal 1100.0
+variable	T2 equal 2*${T}
+
+# Some high temperature to melt the crystal
+variable	Tmelt equal 2000.0
+
+#System size
+variable	nx equal 4
+variable	ny equal 4
+variable	nz equal 20
+variable	nzhalf equal ${nz}*0.5
+variable	a equal 2.87
+variable	length equal ${nz}*${a}
+
+lattice		bcc ${a}
+
+region         box block 0 ${nx} 0 ${ny} 0 ${nz}
+create_box     1 box
+create_atoms   1 box
+
+mass		1 26.9815
+
+pair_style	eam/alloy
+pair_coeff	* * Fe_potential.alloy Fe
+
+velocity	all create ${T2} 1337
+
+# Create a dump file. This can be visualized with
+# e.g. OVITO (http://www.ovito.org/)
+dump		id all atom 1000 atomsdump
+
+# 1 fs timestep
+timestep	0.001
+thermo_style	custom step temp etotal pe press pxx pyy pzz lx ly lz
+
+# output every 100th timestep
+thermo		100
+
+# Equilibration the whole system to the trial melting temperature
+fix		1 all npt temp ${T} ${T} 1 iso 0 0 3 drag 1.0
+run		${eqsteps}
+unfix		1
+
+# Melt half the system
+region  liquid block INF INF INF INF INF ${nzhalf}
+group	liquid_group region liquid
+
+# Heat up one side to Tmelt to make sure it is melted
+fix 2 liquid_group npt temp ${Tmelt} ${Tmelt} 1 z 0 0 10 drag 1.0
+run		${eqsteps}
+unfix		2
+
+# Cool it down again to trial melting temperature
+fix 3 liquid_group npt temp ${T}     ${T}     1 z 0 0 10 drag 1.0
+run		${eqsteps}
+unfix		3
+
+# Run simulation
+fix		4 all nph x 0 0 10 y 0 0 10 z 0 0 1 couple xy drag 1.0
+run		${simsteps}
+unfix		4

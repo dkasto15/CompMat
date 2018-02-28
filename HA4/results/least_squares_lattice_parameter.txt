@@ -1,0 +1,9 @@
+Success!
+`xtol` termination condition is satisfied.
+Output parameters: 101.40519786806544 2.597675384671494 4.96930267486203 2.2308523946595944
+Cost: 4.1891624281453896e-17
+Residuals: 9.153318991650394e-09
+Gradient of cost function at solution: [ 4.00454317e-11 -1.03146837e-08 -8.17179819e-10 -2.93556824e-09]
+Optimality at solution: 3.509390238373832e-08
+Number of function evaluations: 49
+Number of jacobian evaluations: 26
