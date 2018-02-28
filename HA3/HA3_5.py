@@ -56,7 +56,7 @@ def main():
             # print(trapz(n_s_H * 4 * np.pi * r**2, r)) # Check if normalized
             V_s_H = compute_VsH_and_U(A_dd, r, phi)[0]
             V_H = 2*V_s_H
-            A = (-1 / 2.0) * A_dd - I * (Z / r) + V_H + V_xc
+            A = (-1 / 2.0) * A_dd - I * (Z / r) + I*(V_H + V_xc)
             eps, u, E_0 = compute_eps_and_phi(A, r, V_xc, eps_xc, A_dd)  # min eigenvalue & eigenvector
             # print(E_0)
         E_vec[j] = E_0
