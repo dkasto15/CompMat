@@ -1,7 +1,8 @@
-
 x_energy = []
 x_force = []
 x_lattice = []
+
+
 with open('HA4/results/least_squares_solutions.txt', 'r') as textfile:
     next(textfile)
     for line in textfile:
