@@ -12,14 +12,27 @@ from scipy.sparse.linalg import spsolve
 
 def main():
     ''' Run task 4, 5 or 6? '''
-    tasks = [5]
+    tasks = [4, 5, 6]
+    identifiers = ['Hartree', 'Exchange', 'Exchange Correlation']
+    file_loc = 'HA3/HA3_456_conv.txt'
+
+    final_wavefunctions = []
+    final_eigenvalues = []
+    final_energies = []
 
     ''' Physical constants '''
     Z_helium = 2  # Charge of helium nucleus in hartree units
     Z_hydrogen = 1  # Charge of hydrogen nucleus in hartree units
 
+    ''' Unit conversion '''
+    electron_volt_to_hartree = 1 / 27.211385
+    energy_criterion = 10**(-5.) * electron_volt_to_hartree
+
     ''' Computation '''
     nbr_of_conv_loops = 1
+    converge_rmax = False
+    converge_hmax = False
+    h_vec = np.linspace(0.002, 0.04, nbr_of_conv_loops)
     Z = Z_helium
     E_vec = np.zeros(nbr_of_conv_loops)
     # eps_vec = np.zeros(nbr_of_conv_loops)
@@ -30,14 +43,22 @@ def main():
     ax_pot = fig_1.add_subplot(111)
     fig_2 = plt.figure()
     ax_pot2 = fig_2.add_subplot(111)
-    for task in tasks:
+    for i, task in enumerate(tasks):
         for j in range(nbr_of_conv_loops):
+            print(j)
             ''' Finite difference geometry (1D) '''
-            r_max = 7 + j  # Maximum radius of position grid in Hartree units
+            r_max = 7   # Maximum radius of position grid in Hartree units
+            if converge_rmax:
+                r_max = rmax + j  # Maximum radius of position grid in Hartree units
             r_min = 0  # Minimum radius of position grid in Hartree units
             r_max_vec[j] = r_max
             # n_r = 1000 # Number of elements in position grid
-            h = 0.005  # step size
+
+            if converge_hmax:
+                h = h_vec[j]
+            else:
+                h = 0.005  # step size
+
             r = np.arange(r_min, r_max, h)  # constant step size
             # r = np.linspace(r_min, r_max, n_r+1) # Position grid in Hartree units
             r = r[1:]  # Remove singularity in r=0
@@ -57,7 +78,7 @@ def main():
             E_0_old = 0
             counter = 0
 
-            while(abs(E_0 - E_0_old) > 10**(-2) or counter < 3):  # Run at least
+            while(abs(E_0 - E_0_old) > energy_criterion or counter < 3):  # Run at least
                 # three iterations to reduce susceptibility to initial values
                 counter += 1
                 E_0_old = E_0
@@ -67,60 +88,85 @@ def main():
                     V_H = V_s_H
                     V_xc = 0
                     eps_xc = 0
-                    print('V_H: ' + str(V_H))
                 if task == 5:
                     V_H = 2 * V_s_H
                     V_x, eps_x = calc_xc(n_s_H)[0:2]
                     V_xc = V_x
                     eps_xc = eps_x
-                    print('V_x' + str(V_x) +
-                          '\n V_H' + str(V_H) + '\n eps_xc' + str(eps_xc))
                 if task == 6:
                     V_H = 2 * V_s_H
                     V_x, eps_x, V_c, eps_c, V_xc, eps_xc = calc_xc(n_s_H)
-                    print('V_x' + str(V_x) + '\n V_c: ' + str(V_c) +
-                          '\n V_H' + str(V_H) + '\n eps_xc' + str(eps_xc))
 
                 V = V_H + V_xc
                 A = create_Hamiltonian(r, h, Z, V)
                 n_s_H, eps, u = compute_n(A, r)
-                print(str(u[0]) + ', ' + str(u[1]))
 
-                print(trapz(n_s_H * 4 * np.pi * r**2, r))
                 E_0 = 2 * eps - 2 * trapz(abs(u)**(2.0) *
                                           (0.5 * V_H + V_xc - eps_xc), r)  # Ground state energy
                 E_vec[j] = E_0  # Energy
-                print(E_0)
 
-        print('Done: r_max = ' + str(r_max))
-        # phi_vec[j] = phi_s_H
+            final_energies.append(E_0)
+            final_eigenvalues.append(eps)
+            final_wavefunctions.append(n_s_H * 4 * np.pi * r**2)
 
-        ''' Plotting '''
-
-        # ax_pot.plot(r_max_vec, eps_vec, label='Eigenvalues')
-        ax_pot.plot(r_max_vec, E_vec, '--', label='Energies')  # Plot E as func. of r_max
+    print(r_max_vec)
+    print(h_vec)
+    print(E_vec)
+    ''' Plotting '''
+    if converge_rmax:
+        fig_1 = plt.figure()
+        ax_pot = fig_1.add_subplot(111)
+        ax_pot.plot(r_max_vec, E_vec, '-')  # Plot E as func. of r_max
         ax_pot.set_xlabel('Max. radius [a.u.]')
         ax_pot.set_ylabel('Converged energy value [a.u]')
         ax_pot.set_title('Energy convergence when increasing maximum radius')
-
+        ax_pot.set_xlim([r_max_vec[0], r_max_vec[-1]])
+        ax_pot.minorticks_on()
+        ax_pot.grid(True, which='minor', linestyle='--')
+        ax_pot.grid(True, which='major', linestyle='-')
         # ax_pot.legend(loc=2)
         plt.savefig('eigAndEn.eps')
         plt.savefig('eigAndEn.png')
+        plt.show()
 
-        ax_pot2.plot(r, 4 * np.pi * r**2 * n_s_H, label='Energy ' + str(E_0))
-        ax_pot2.set_title('Radial probability distribution for helium electrons when the \n' +
-                          'maximum radius in simulation was ' + str(r_max) + ' a.u.')
-        ax_pot2.set_xlabel('Radius [a.u.]')
-        ax_pot2.set_ylabel('Electron density [a.u.]')
-        ax_pot2.legend()
+    if converge_hmax:
+        fig_1 = plt.figure()
+        ax_pot = fig_1.add_subplot(111)
+        ax_pot.plot(h_vec, E_vec, '-')  # Plot E as func. of r_max
+        ax_pot.set_xlabel('Grid spacing [a.u.]')
+        ax_pot.set_ylabel('Converged energy value [a.u]')
+        ax_pot.set_title('Energy convergence when increasing decreasing grid spacing')
+        ax_pot.set_xlim([h_vec[0], h_vec[-1]])
+        ax_pot.minorticks_on()
+        ax_pot.grid(True, which='minor', linestyle='--')
+        ax_pot.grid(True, which='major', linestyle='-')
+        # ax_pot.legend(loc=2)
+        plt.savefig('eigAndEn.eps')
+        plt.savefig('eigAndEn.png')
+        plt.show()
 
-    plt.show()
+    with open(file_loc, 'w') as textfile:
+        text = 'Name of run in first row, energies in second, and eigenvalues in third' + \
+            'The rest is values of the wavefunction in colums. The last column is ' + \
+            'the space discretization.'
+        for i in range(len(tasks)):
+            text = text + identifiers[i] + ','
+        text = text[:-1] + '\n'
 
-    ''' Write data to file '''
-    print(E_vec)
-    with open("eigAndEn.txt", "w") as textfile:
-        for j in range(nbr_of_conv_loops):
-            textfile.write(str(E_vec[j]) + '\n')
+        for i in range(len(tasks)):
+            text = text + str(final_energies[i]) + ','
+        text = text[:-1] + '\n'
+
+        for i in range(len(tasks)):
+            text = text + str(final_eigenvalues[i]) + ','
+        text = text[:-1] + '\n'
+
+        for i in range(len(final_wavefunctions[0])):
+            for j in range(len(tasks)):
+                text = text + str(final_wavefunctions[j][i]) + ','
+            text = text + str(r[i]) + '\n'
+        text = text[:-1]
+        textfile.write(text)
 
 
 ''' Functions '''
@@ -144,15 +190,9 @@ def compute_n(A, r):
     eps = eig[eps_min_ind]
     u = wave[:, eps_min_ind]
 
-
-<< << << < HEAD
-    print(u)
     n_s_H = (abs(u) / r)**2 / (4 * np.pi)
     norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
-== == == =
-    n_s_H = abs(u)**2 / (r**2 * 4 * np.pi)
-    norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
->>>>>> > a406e6eeb29510f486be66ee683f34b2077585af
+
     u = u / np.sqrt(norm)
     n_s_H = n_s_H / norm
     return n_s_H, eps, u
@@ -185,6 +225,16 @@ def calc_xc(n):
     V_xc = V_x + V_c
     e_xc = ex + ec
     return V_x, ex, V_c, ec, V_xc, e_xc
+
+
+def append_data(file_loc, identifier, wavefunction, energy):
+    with open(file_loc, 'a') as textfile:
+        text = identifier + ' ground state energy [a. u]: ' + str(energy) + '\n'
+        text = 'Probability density [a.u.]: '
+        for val in wavefunction:
+            text = text + str(val) + ','
+        text = text[:-1]
+        textfile.write(text + '\n')
 
 
 if __name__ == '__main__':
