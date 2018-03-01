@@ -1,0 +1,3 @@
+Success!
+`ftol` termination condition is satisfied.
+Output parameters: 3820.4120371775857 3.5319330222628547 4.459360931468501 1.403986938537043

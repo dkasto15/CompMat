@@ -1,0 +1,9 @@
+Success!
+`gtol` termination condition is satisfied.
+Output parameters: 112.28999312510292 4.753220411679904 7.945085413093677 1.3627911592180504
+Cost: 3.944304526105059e-31
+Residuals: 8.881784197001252e-16
+Gradient of cost function at solution: [ 4.76616356e-21 -1.52638844e-18 -3.75680634e-16  4.36596989e-15]
+Optimality at solution: 1.5839352776105515e-15
+Number of function evaluations: 7
+Number of jacobian evaluations: 7

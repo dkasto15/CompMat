@@ -1,0 +1,9 @@
+Energy-Volume curves for Al
+===========================
+
+1) Structures included:
+     fcc, bcc, sc and diamond
+
+2) All calculations are done with conventional cells
+
+3) The parameters alat0 were used with the scale factor for each calculated point
