@@ -12,7 +12,7 @@ from scipy.sparse.linalg import spsolve
 
 def main():
     ''' Run task 4, 5 or 6? '''
-    tasks = [5]
+    tasks = [4, 5, 6]
 
     ''' Physical constants '''
     Z_helium = 2  # Charge of helium nucleus in hartree units
@@ -33,7 +33,7 @@ def main():
     for task in tasks:
         for j in range(nbr_of_conv_loops):
             ''' Finite difference geometry (1D) '''
-            r_max = 7 + j  # Maximum radius of position grid in Hartree units
+            r_max = 8 + j  # Maximum radius of position grid in Hartree units
             r_min = 0  # Minimum radius of position grid in Hartree units
             r_max_vec[j] = r_max
             # n_r = 1000 # Number of elements in position grid
@@ -57,7 +57,7 @@ def main():
             E_0_old = 0
             counter = 0
 
-            while(abs(E_0 - E_0_old) > 10**(-2) or counter < 3):  # Run at least
+            while(abs(E_0 - E_0_old) > 10**(-4) or counter < 3):  # Run at least
                 # three iterations to reduce susceptibility to initial values
                 counter += 1
                 E_0_old = E_0
@@ -143,26 +143,20 @@ def compute_n(A, r):
     eps_min_ind = np.argmin(eig)  # Pick the eigenvalue corresponding to the lowest eigenvalue
     eps = eig[eps_min_ind]
     u = wave[:, eps_min_ind]
-
-
-<< << << < HEAD
     print(u)
     n_s_H = (abs(u) / r)**2 / (4 * np.pi)
     norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
-== == == =
-    n_s_H = abs(u)**2 / (r**2 * 4 * np.pi)
-    norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
->>>>>> > a406e6eeb29510f486be66ee683f34b2077585af
     u = u / np.sqrt(norm)
     n_s_H = n_s_H / norm
     return n_s_H, eps, u
 
 
-def calc_xc(n):
+def calc_xc(n_s_H):
+    n = 2 * n_s_H # Total electron density
     ''' Exchange '''
-    ex = -(3 / 4.0) * (3 * 2 * n / np.pi)**(1 / 3.0)
+    ex = -(3 / 4.0) * (3 * n / np.pi)**(1 / 3.0)
     dex_dn = -(1 / 4.0) * (3 / np.pi)**(-1 / 3.0)
-    V_x = ex + 2 * n * dex_dn
+    V_x = ex + n * dex_dn
 
     ''' Correlation '''
     A, B, C, D = 0.0311, -0.048, 0.0020, -0.0116
