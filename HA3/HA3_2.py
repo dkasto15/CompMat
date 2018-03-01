@@ -40,7 +40,7 @@ def main():
     ax_potential.plot(r, V_s_H, label='Calculated V$_{H}$')
     ax_potential.plot(r, V_hartree, '--', label='Theoretical V$_{H}$')
     ax_potential.set_xlabel('Radius [a.u.]')
-    ax_potential.set_ylabel('Hartree potential times radius [a.u.]')
+    ax_potential.set_ylabel('Hartree potential [a.u.]')
     ax_potential.set_title('Difference between simulated and analytical potential')
     ax_potential.legend(loc=1)
 

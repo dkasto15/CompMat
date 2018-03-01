@@ -53,23 +53,26 @@ def main():
     # magnitude of the eigenvectors
     e_min_ind = np.argmin(energy)  # index of lowest energy in the energy vector
     energy_min = energy[e_min_ind]
-    phi_min = wave_functions[:, e_min_ind]  # Find the wave function set corresponding
+    u = wave_functions[:, e_min_ind]  # Find the wave function set corresponding
     # to the lowest energy
-    phi_min = phi_min / np.sqrt(np.trapz(phi_min**2, r))  # normalization
+    phi = u / (np.sqrt(4 * np.pi) * r)
+    phi = phi / np.sqrt(np.trapz(4 * np.pi * r**2 * phi**2, r))  # normalization
     print(energy_min)
+    print(np.trapz(4 * np.pi * r**2 * phi_s_H**2, r))
+    print(np.trapz(4 * np.pi * r**2 * phi**2, r))
 
     ''' Plotting '''
     fig_1 = plt.figure()
     ax_potential = fig_1.add_subplot(111)
-    label1 = 'Calculated radial electron density. \n Energy: ' \
+    label1 = 'Calculated distribution. \nEnergy: ' \
         + str(np.round(np.real(energy_min), 6)) + ' atomic units'
-    label2 = 'Theoretical radial electron density. \n Energy: ' \
+    label2 = 'Theoretical distribution. \nEnergy: ' \
         + str(-0.5) + ' atomic units'
-    ax_potential.plot(r, phi_min**2, label=label1)
-    ax_potential.plot(r, 4 * np.pi * r**2 * phi_s_H**2, '--', label=label2)
-    ax_potential.set_xlabel('Radius [a.u.]')
-    ax_potential.set_ylabel('Electron density  [a.u.]')
-    ax_potential.set_title('Electron density for simulated ground state helium\n' +
+    ax_potential.plot(r, 4 * np.pi * r**2 * abs(phi)**2, label=label1)
+    ax_potential.plot(r, 4 * np.pi * r**2 * abs(phi_s_H)**2, '--', label=label2)
+    ax_potential.set_xlabel('Radial coordinate [atomic units]')
+    ax_potential.set_ylabel('Probability distribution function')
+    ax_potential.set_title('Probability distribution function for simulated ground state hydrogen\n' +
                            'compared with analytical solution')
     ax_potential.legend(loc=1)
 
