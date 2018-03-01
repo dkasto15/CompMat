@@ -45,7 +45,7 @@ def main():
         # V_hartree = 1/r - (1 + 1/r)*np.exp(-2*r) # The hartree potential for hydrogen
         phi_s_H_theor = (1 / np.sqrt(np.pi)) * np.exp(-r)  # Radial wave function
                                                            # for hydrogen in hartree
-        n_s_H = 2*phi_s_H_theor**2  # Initial guess
+        n_s_H = phi_s_H_theor**2  # Initial guess
         n_s_H = n_s_H / trapz(n_s_H * 4 * np.pi * r**2, r) # Normalize
 
         E_0 = 1
@@ -124,7 +124,7 @@ def compute_n(A, r):
     eps_min_ind = np.argmin(eig) # Pick the eigenvalue corresponding to the lowest eigenvalue
     eps = eig[eps_min_ind]
     u = wave[:, eps_min_ind]
-    n_s_H = (abs(u) / r)**2 / (4 * np.pi)
+    n_s_H = abs(u)**2 / (r**2 * 4 * np.pi)
     norm = trapz(n_s_H * 4 * np.pi * r**2, r) # Normalization factor
     u = u / np.sqrt(norm)
     n_s_H = n_s_H / norm
