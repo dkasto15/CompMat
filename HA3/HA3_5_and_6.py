@@ -33,7 +33,7 @@ def main():
     for task in tasks:
         for j in range(nbr_of_conv_loops):
             ''' Finite difference geometry (1D) '''
-            r_max = 9 + j  # Maximum radius of position grid in Hartree units
+            r_max = 7 + j  # Maximum radius of position grid in Hartree units
             r_min = 0  # Minimum radius of position grid in Hartree units
             r_max_vec[j] = r_max
             # n_r = 1000 # Number of elements in position grid
