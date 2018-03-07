@@ -13,15 +13,12 @@ from scipy.sparse.linalg import spsolve
 def main():
     ''' Run task 4, 5 or 6? '''
     tasks = [4, 5, 6]
-<<<<<<< HEAD:HA3/HA3_456.py
     identifiers = ['Hartree', 'Exchange', 'Exchange Correlation']
     file_loc = 'HA3/HA3_456_conv.txt'
 
     final_wavefunctions = []
     final_eigenvalues = []
     final_energies = []
-=======
->>>>>>> 12bba7e6301584608fe7bceb4649ec43fb526593:HA3/HA3_5_and_6.py
 
     ''' Physical constants '''
     Z_helium = 2  # Charge of helium nucleus in hartree units
@@ -50,13 +47,9 @@ def main():
         for j in range(nbr_of_conv_loops):
             print(j)
             ''' Finite difference geometry (1D) '''
-<<<<<<< HEAD:HA3/HA3_456.py
             r_max = 7   # Maximum radius of position grid in Hartree units
             if converge_rmax:
                 r_max = rmax + j  # Maximum radius of position grid in Hartree units
-=======
-            r_max = 8 + j  # Maximum radius of position grid in Hartree units
->>>>>>> 12bba7e6301584608fe7bceb4649ec43fb526593:HA3/HA3_5_and_6.py
             r_min = 0  # Minimum radius of position grid in Hartree units
             r_max_vec[j] = r_max
             # n_r = 1000 # Number of elements in position grid
@@ -85,11 +78,7 @@ def main():
             E_0_old = 0
             counter = 0
 
-<<<<<<< HEAD:HA3/HA3_456.py
             while(abs(E_0 - E_0_old) > energy_criterion or counter < 3):  # Run at least
-=======
-            while(abs(E_0 - E_0_old) > 10**(-4) or counter < 3):  # Run at least
->>>>>>> 12bba7e6301584608fe7bceb4649ec43fb526593:HA3/HA3_5_and_6.py
                 # three iterations to reduce susceptibility to initial values
                 counter += 1
                 E_0_old = E_0
@@ -200,16 +189,10 @@ def compute_n(A, r):
     eps_min_ind = np.argmin(eig)  # Pick the eigenvalue corresponding to the lowest eigenvalue
     eps = eig[eps_min_ind]
     u = wave[:, eps_min_ind]
-<<<<<<< HEAD:HA3/HA3_456.py
 
     n_s_H = (abs(u) / r)**2 / (4 * np.pi)
     norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
 
-=======
-    print(u)
-    n_s_H = (abs(u) / r)**2 / (4 * np.pi)
-    norm = trapz(n_s_H * 4 * np.pi * r**2, r)  # Normalization factor
->>>>>>> 12bba7e6301584608fe7bceb4649ec43fb526593:HA3/HA3_5_and_6.py
     u = u / np.sqrt(norm)
     n_s_H = n_s_H / norm
     return n_s_H, eps, u

@@ -10,7 +10,7 @@ global n_sets, cells
 
 
 def main():
-    A = 100  # eV
+    A = 1000  # eV
     lmbd = 3  # Å^(-1)
     D = 5  # Å
     mu2 = 2  # Å^(-1)
@@ -20,15 +20,17 @@ def main():
     n_sets = len(file_tags)
 
     forces = []
+    atoms_set = []
     ls_forces = True
     ls_energy = False
     ls_lattice = False
 
     atom_set = []  # Set of meassurements.
     for index, tag in enumerate(file_tags):
-        atom_set.append(read('HA4/downloads/snapshots_with_forces_xyz/res_POSCAR_' +
-                             tag + '.xyz'))
-        forces_tmp = atom_set[index].get_forces()
+        atoms_set.append(read('HA4/downloads/snapshots_with_forces_xyz/res_POSCAR_' +
+                              tag + '.xyz'))
+
+        forces_tmp = atoms_set[index].get_forces()
         forces = np.hstack([forces, forces_tmp[:, 0], forces_tmp[:, 1], forces_tmp[:, 2]])
 
     forces = np.asarray(forces)
@@ -60,7 +62,7 @@ def main():
                                    x0,
                                    bounds=([0.5 * A, 0.5 * lmbd, 0.5 * D, 0.5 * mu2],
                                            [1000000000, 2 * lmbd, 2 * D, 2 * mu2]),
-                                   args=(atom_set, forces),
+                                   args=(atoms_set, forces),
                                    ftol=ftol,
                                    xtol=xtol,
                                    gtol=gtol,
@@ -72,8 +74,6 @@ def main():
     if ls_lattice:
         res_lattice = least_squares(penalty_function_lattice_param,
                                     x0,
-                                    bounds=([0.5 * A, 0.5 * lmbd, 0.5 * D, 0.5 * mu2],
-                                            [2 * A, 2 * lmbd, 2 * D, 2 * mu2]),
                                     args=(al_bulk, a0),
                                     ftol=ftol,
                                     xtol=xtol,
@@ -87,7 +87,7 @@ def main():
 def calc_forces_al(atoms_set, A, lmbd, D, mu2):
     forces = []
     calc = get_calc((A, lmbd, D, mu2))
-    for atoms in atom_set:
+    for atoms in atoms_set:
         atoms.set_calculator(calc)
         forces_tmp = atoms.get_forces()
         forces = np.hstack([forces, forces_tmp[:, 0], forces_tmp[:, 1], forces_tmp[:, 2]])
@@ -174,3 +174,7 @@ def write_least_squares_output(name, res):
     else:
         f_least_squares.write(res.message)
     f_least_squares.close()
+
+
+if __name__ == '__main__':
+    main()
