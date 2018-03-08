@@ -21,13 +21,14 @@ def main():
     param_0 = [A, lmbd, D, mu2]
 
     ''' Input data '''
-    al_bulk = bulk('Al', 'fcc', a=4.032)
+    al_bulk_lattice = bulk('Al', 'fcc', a=4.032)
+    al_bulk_energy = bulk('Al', 'fcc', a=4.032)
     data_input = []  # Array for storing the different types of input data
     for index, tag in enumerate(file_tags):
         data_input.append(read('HA4/downloads/snapshots_with_forces_xyz/res_POSCAR_' +
                                tag + '.xyz'))
-    data_input.append(al_bulk)
-    data_input.append(al_bulk)
+    data_input.append(al_bulk_lattice)
+    data_input.append(al_bulk_energy)
     ''' Observed output data '''
     a0 = 4.032
     E0 = -3.36
@@ -47,8 +48,8 @@ def main():
     loss = 'linear'
 
     w_force = 1
-    w_E0 = 200000
-    w_a0 = 0
+    w_E0 = 970
+    w_a0 = 970
     weights = np.sqrt(np.array([w_force, w_E0, w_a0]))
 
     ''' Least squares optimization procedure '''
@@ -143,14 +144,13 @@ def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
     # Calculate the potential energy for the Al bulk
     energies.append(al_bulk_ASE.get_potential_energy())
     volumes.append(al_bulk_ASE.get_volume())
-    print(energies)
-    print(volumes)
     #plt.plot((4 * np.asarray(volumes))**(1 / 3), energies)
     # plt.show()
     # Plot energies as a function of unit cell volume (directly related to latt. const.)
     eos = EquationOfState(volumes, energies)
     v0, E, B = eos.fit()
     # Latt. const. acc. to ASE doc., but why is this correct?
+    print('asdasdasdasdasd: ', E)
     a_calc = (4 * v0)**(1 / 3.0)
     # a_calc = v0**(1 / 3.0)
     print('a=' + str(a_calc))

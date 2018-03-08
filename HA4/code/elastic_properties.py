@@ -10,9 +10,7 @@ global al_bulk
 
 
 def main():
-    ''' Location of input and experimental output data '''
-    file_tags = ['0.9', '1.0', '1.1']
-
+    with open('HAlea')
     ''' Optimization parameters '''
     A = 1000  # eV
     lmbd = 3  # Å^(-1)
@@ -20,53 +18,15 @@ def main():
     mu2 = 1  # 2  # Å^(-1)
     param_0 = [A, lmbd, D, mu2]
 
-    ''' Input data '''
+    ''' Strains and stuff '''
+    ep_mat = np.array([[e1, 0, 0], [0, -e1, 0], [0, 0, e1**2 / (1 - e1**2)]])
     al_bulk = bulk('Al', 'fcc', a=4.032)
-    data_input = []  # Array for storing the different types of input data
-    for index, tag in enumerate(file_tags):
-        data_input.append(read('HA4/downloads/snapshots_with_forces_xyz/res_POSCAR_' +
-                               tag + '.xyz'))
-    data_input.append(al_bulk)
-    data_input.append(al_bulk)
+    print(al_bulk.get_cell)
+
     ''' Observed output data '''
     a0 = 4.032
     E0 = -3.36
-    data_exp = []   # Array for storing the experimental output data from the input data
-    energy_evo = []  # Vector for storing the evolution of the energy vector
-    lattice_evo = []  # Vector for storing the evolution of the lattice parameter
 
-    for index, tag in enumerate(file_tags):
-        forces = data_input[index].get_forces()
-        data_exp = np.hstack([data_exp, forces[:, 0], forces[:, 1], forces[:, 2]])
-    data_exp = np.append(data_exp, a0)
-    data_exp = np.append(data_exp, E0)
-
-    ftol = 1e-8  # 1e-8
-    xtol = 1e-8
-    gtol = 1e-8
-    loss = 'linear'
-
-    w_force = 1
-    w_E0 = 200000
-    w_a0 = 0
-    weights = np.sqrt(np.array([w_force, w_E0, w_a0]))
-
-    ''' Least squares optimization procedure '''
-    res = least_squares(calc_residuals,
-                        param_0,
-                        # method='lm',
-                        args=(data_input, data_exp, weights),
-                        ftol=ftol,
-                        xtol=xtol,
-                        # diff_step=0.1,
-                        gtol=gtol,
-                        loss=loss,
-                        verbose=2)
-
-    write_least_squares_output('1', res)
-
-    E0_final = calc_cohesive_energy(data_input[4], A, lmbd, D, mu2)
-    a0_final = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
     with open('HA4/results/output.txt', 'a') as textfile:
         line = ''
         for el in res.x:
