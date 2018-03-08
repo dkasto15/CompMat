@@ -2,7 +2,7 @@ from eam_calculator import get_calc
 from ase.io import read
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.optimize import least_squares
+from scipy.optimize import leastsq
 from ase.eos import EquationOfState
 from ase.atoms import copy
 from ase.build import bulk
@@ -42,33 +42,28 @@ def main():
     data_exp = np.append(data_exp, a0)
     data_exp = np.append(data_exp, E0)
 
-    ''' Simulated output data '''
-    data_sim = np.zeros(np.shape(data_exp))
-
-    ''' Least squares optimization parameters '''
-    residuals = np.zeros(np.shape(data_exp))
-
     ftol = 1e-8
     xtol = 1e-8
     gtol = 1e-8
     loss = 'linear'
 
     w_force = 1
-    w_E0 = 972
-    w_a0 = 972
-    weights = [w_force, w_E0, w_a0]
+    w_E0 = 0  # 972
+    w_a0 = 0  # 972
+    weights = np.sqrt(np.array([w_force, w_E0, w_a0]))
 
     ''' Least squares optimization procedure '''
-    res_cohesive_energy = least_squares(calc_residuals,
-                                        param_0,
-                                        # method='lm',
-                                        args=(data_sim, data_input, data_exp, weights, residuals),
-                                        ftol=ftol,
-                                        xtol=xtol,
-                                        diff_step=0.1,
-                                        # gtol=gtol,
-                                        # loss=loss,
-                                        verbose=2)
+    res_cohesive_energy = leastsq(calc_residuals,
+                                  param_0,
+                                  # method='lm',
+                                  args=(data_input, data_exp, weights),
+                                  ftol=ftol,
+                                  xtol=xtol,
+                                  # diff_step=0.1,
+                                  # gtol=gtol,
+                                  # loss=loss,
+                                  # verbose=2)
+                                  )
 
     plt.plot(data_exp, data_sim)
     plt.show()
@@ -91,8 +86,8 @@ def calc_cohesive_energy(al_bulk_ASE, A, lmbd, D, mu2):
 
 
 def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
-    q = 0.5
-    n_points = 30
+    q = 0.2
+    n_points = 15
     calc = get_calc((A, lmbd, D, mu2))
 
     # # # Find lattice constant with lowest energy # # #
@@ -109,7 +104,7 @@ def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
         energies.append(al_bulk_ASE.get_potential_energy())
         volumes.append(al_bulk_ASE.get_volume())
 
-    # plt.plot(np.asarray(volumes)**(1 / 3), energies)
+    #plt.plot(np.asarray(volumes)**(1 / 3), energies)
     # plt.show()
     # Plot energies as a function of unit cell volume (directly related to latt. const.)
     eos = EquationOfState(volumes, energies)
@@ -123,24 +118,17 @@ def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
     return a_calc
 
 
-def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights, residuals):
+def calc_residuals(optimization_params, data_input, data_exp, weights):
     print('Optimization params: ', optimization_params)
     A = optimization_params[0]
     lmbd = optimization_params[1]
     D = optimization_params[2]
     mu2 = optimization_params[3]
 
-
-<< << << < HEAD
     data_input_forces = data_input[0:3]
-    data_sim[:-2] = calc_forces(data_input_forces, A, lmbd, D, mu2)
-== == == =
-    forces = data_input[0:3]
-    print(data_input[3])
-    data_sim[:-2] = calc_forces(forces, A, lmbd, D, mu2)
->>>>>> > 871ede2061692e7b6429ad5356c4abd8f5a986cd
-    data_sim[-2] = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
-    data_sim[-1] = calc_cohesive_energy(data_input[3], A, lmbd, D, mu2)
+    data_sim = calc_forces(data_input_forces, A, lmbd, D, mu2)
+    data_sim = np.append(data_sim, calc_lattice_parameter(data_input[3], A, lmbd, D, mu2))
+    data_sim = np.append(data_sim, calc_cohesive_energy(data_input[3], A, lmbd, D, mu2))
 
     print(data_sim[-3])
     print(data_sim[-2])
@@ -150,9 +138,11 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     w_E0 = weights[1]
     w_a0 = weights[2]
 
-    residuals[0:-2] = w_force * (data_sim[:-2] - data_exp[:-2])
-    residuals[-2] = w_a0 * (data_sim[-2] - data_exp[-2])
-    residuals[-1] = w_E0 * (data_sim[-1] - data_exp[-1])
+    residuals = (data_sim - data_exp)
+    residuals[:-2] = w_force * residuals[:-2]
+    residuals[-2] = w_a0 * residuals[-2]
+    residuals[-1] = w_E0 * residuals[-1]
+
     # print(residuals)
     return residuals
 
