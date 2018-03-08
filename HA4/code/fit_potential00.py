@@ -17,7 +17,7 @@ def main():
     A = 1000  # eV
     lmbd = 3  # Å^(-1)
     D = 5  # Å
-    mu2 = 1 #2  # Å^(-1)
+    mu2 = 1  # 2  # Å^(-1)
     param_0 = [A, lmbd, D, mu2]
 
     ''' Input data '''
@@ -54,29 +54,20 @@ def main():
     loss = 'linear'
 
     w_force = 1
-<<<<<<< HEAD
-    w_E0 = 0  # len(data_exp) - 2
-    w_a0 = 0  # len(data_exp) - 2
-=======
     w_E0 = 972
     w_a0 = 972
->>>>>>> 871ede2061692e7b6429ad5356c4abd8f5a986cd
     weights = [w_force, w_E0, w_a0]
 
     ''' Least squares optimization procedure '''
     res_cohesive_energy = least_squares(calc_residuals,
                                         param_0,
-<<<<<<< HEAD
                                         # method='lm',
-=======
-                                        #method='lm',
->>>>>>> 871ede2061692e7b6429ad5356c4abd8f5a986cd
                                         args=(data_sim, data_input, data_exp, weights, residuals),
                                         ftol=ftol,
                                         xtol=xtol,
                                         diff_step=0.1,
-                                        #gtol=gtol,
-                                        #loss=loss,
+                                        # gtol=gtol,
+                                        # loss=loss,
                                         verbose=2)
 
     plt.plot(data_exp, data_sim)
@@ -139,14 +130,15 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     D = optimization_params[2]
     mu2 = optimization_params[3]
 
-<<<<<<< HEAD
+
+<< << << < HEAD
     data_input_forces = data_input[0:3]
     data_sim[:-2] = calc_forces(data_input_forces, A, lmbd, D, mu2)
-=======
+== == == =
     forces = data_input[0:3]
     print(data_input[3])
     data_sim[:-2] = calc_forces(forces, A, lmbd, D, mu2)
->>>>>>> 871ede2061692e7b6429ad5356c4abd8f5a986cd
+>>>>>> > 871ede2061692e7b6429ad5356c4abd8f5a986cd
     data_sim[-2] = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
     data_sim[-1] = calc_cohesive_energy(data_input[3], A, lmbd, D, mu2)
 
@@ -161,7 +153,7 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     residuals[0:-2] = w_force * (data_sim[:-2] - data_exp[:-2])
     residuals[-2] = w_a0 * (data_sim[-2] - data_exp[-2])
     residuals[-1] = w_E0 * (data_sim[-1] - data_exp[-1])
-    #print(residuals)
+    # print(residuals)
     return residuals
 
 
