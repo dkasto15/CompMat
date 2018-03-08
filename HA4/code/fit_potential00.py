@@ -26,14 +26,16 @@ def main():
     for index, tag in enumerate(file_tags):
         data_input.append(read('HA4/downloads/snapshots_with_forces_xyz/res_POSCAR_' +
                                tag + '.xyz'))
+        print(data_input[index].get_calculator())
     data_input.append(al_bulk)
 
     ''' Observed output data '''
     a0 = 4.032
     E0 = -3.36
     data_exp = []   # Array for storing the experimental output data from the input data
-    energy_ev = []  # Vector for storing the evolution of the energy vector
-    lattice_ev = []  # Vector for storing the evolution of the lattice parameter
+    energy_evo = []  # Vector for storing the evolution of the energy vector
+    lattice_evo = []  # Vector for storing the evolution of the lattice parameter
+
     for index, tag in enumerate(file_tags):
         forces = data_input[index].get_forces()
         data_exp = np.hstack([data_exp, forces[:, 0], forces[:, 1], forces[:, 2]])
@@ -52,14 +54,14 @@ def main():
     loss = 'linear'
 
     w_force = 1
-    w_E0 = 1000
-    w_a0 = 1000
+    w_E0 = 0  # len(data_exp) - 2
+    w_a0 = 0  # len(data_exp) - 2
     weights = [w_force, w_E0, w_a0]
 
     ''' Least squares optimization procedure '''
     res_cohesive_energy = least_squares(calc_residuals,
                                         param_0,
-                                        method='lm',
+                                        # method='lm',
                                         args=(data_sim, data_input, data_exp, weights, residuals),
                                         ftol=ftol,
                                         xtol=xtol,
@@ -73,13 +75,11 @@ def main():
 
 def calc_forces(data_input_forces, A, lmbd, D, mu2):
     calc = get_calc((A, lmbd, D, mu2))
-    counter = 0
     forces = []
     for atoms in data_input_forces:
         atoms.set_calculator(calc)
         forces_mat = atoms.get_forces()
         forces = np.hstack([forces, forces_mat[:, 0], forces_mat[:, 1], forces_mat[:, 2]])
-
     return forces
 
 
@@ -128,8 +128,8 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     D = optimization_params[2]
     mu2 = optimization_params[3]
 
-    forces = data_input[0:3]
-    data_sim[:-2] = calc_forces(forces, A, lmbd, D, mu2)
+    data_input_forces = data_input[0:3]
+    data_sim[:-2] = calc_forces(data_input_forces, A, lmbd, D, mu2)
     data_sim[-2] = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
     data_sim[-1] = calc_cohesive_energy(data_input[3], A, lmbd, D, mu2)
 
