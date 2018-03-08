@@ -17,7 +17,7 @@ def main():
     A = 1000  # eV
     lmbd = 3  # Å^(-1)
     D = 5  # Å
-    mu2 = 2  # Å^(-1)
+    mu2 = 1 #2  # Å^(-1)
     param_0 = [A, lmbd, D, mu2]
 
     ''' Input data '''
@@ -52,19 +52,20 @@ def main():
     loss = 'linear'
 
     w_force = 1
-    w_E0 = 1000
-    w_a0 = 1000
+    w_E0 = 972
+    w_a0 = 972
     weights = [w_force, w_E0, w_a0]
 
     ''' Least squares optimization procedure '''
     res_cohesive_energy = least_squares(calc_residuals,
                                         param_0,
-                                        method='lm',
+                                        #method='lm',
                                         args=(data_sim, data_input, data_exp, weights, residuals),
                                         ftol=ftol,
                                         xtol=xtol,
-                                        gtol=gtol,
-                                        loss=loss,
+                                        diff_step=0.1,
+                                        #gtol=gtol,
+                                        #loss=loss,
                                         verbose=2)
 
     plt.plot(data_exp, data_sim)
@@ -79,7 +80,6 @@ def calc_forces(data_input_forces, A, lmbd, D, mu2):
         atoms.set_calculator(calc)
         forces_mat = atoms.get_forces()
         forces = np.hstack([forces, forces_mat[:, 0], forces_mat[:, 1], forces_mat[:, 2]])
-
     return forces
 
 
@@ -115,6 +115,7 @@ def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
     v0, E, B = eos.fit()
     # Latt. const. acc. to ASE doc., but why is this correct?
     a_calc = v0**(1 / 3.0)
+    print('a=' + str(a_calc))
 
     al_bulk_ASE.set_cell(cell_0)
 
@@ -129,9 +130,14 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     mu2 = optimization_params[3]
 
     forces = data_input[0:3]
+    print(data_input[3])
     data_sim[:-2] = calc_forces(forces, A, lmbd, D, mu2)
     data_sim[-2] = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
     data_sim[-1] = calc_cohesive_energy(data_input[3], A, lmbd, D, mu2)
+
+    print(data_sim[-3])
+    print(data_sim[-2])
+    print(data_sim[-1])
 
     w_force = weights[0]
     w_E0 = weights[1]
@@ -140,6 +146,7 @@ def calc_residuals(optimization_params, data_sim, data_input, data_exp, weights,
     residuals[0:-2] = w_force * (data_sim[:-2] - data_exp[:-2])
     residuals[-2] = w_a0 * (data_sim[-2] - data_exp[-2])
     residuals[-1] = w_E0 * (data_sim[-1] - data_exp[-1])
+    #print(residuals)
     return residuals
 
 
