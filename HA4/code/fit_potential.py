@@ -48,8 +48,8 @@ def main():
     loss = 'linear'
 
     w_force = 1
-    w_E0 = 970
-    w_a0 = 970
+    w_E0 = 1
+    w_a0 = 1
     weights = np.sqrt(np.array([w_force, w_E0, w_a0]))
 
     ''' Least squares optimization procedure '''

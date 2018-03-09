@@ -31,6 +31,11 @@ with open('HA4/results/fit_potential_output.txt', 'r') as textfile:
     lmbd = float(line[1])
     D = float(line[2])
     mu2 = float(line[3])
+    next(textfile)
+    next(textfile)
+    line = next(textfile)
+    line = line.split(':')
+    RMS_res = float(line[1])
 
 forces_eam = []
 forces_dft = []
@@ -86,18 +91,19 @@ ax_pair_potential.set_xlabel('Radial coordinate [atomic units]')
 
 fig_compare_forces = plt.figure()
 ax_compare_forces = fig_compare_forces.add_subplot(111)
-ax_compare_forces.plot(forces_eam, label='EAM Simulation',
-                       color='blue', marker='o', markersize=5)
-ax_compare_forces.plot(forces_dft, label='DFT Simulation',
-                       color='red', marker='o', markersize=5)
+ax_compare_forces.plot(forces_dft, forces_eam, '.', color='blue',
+                       label='RMS of residual: ' + str(np.round(RMS_res * 1000) / 1000))
 ax_compare_forces.minorticks_on()
 ax_compare_forces.grid(True, which='minor', linestyle='--')
 ax_compare_forces.grid(True, which='major', linestyle='-')
-ax_compare_forces.set_xlim(0, 180)
-ax_compare_forces.set_ylabel('Force component [atomic units]')
-ax_compare_forces.set_xlabel('Index [-]')
+ax_compare_forces.set_ylabel('Forces EAM [atomic units]')
+ax_compare_forces.set_xlabel('Forces DFT [atomic units]')
+ax_compare_forces.legend()
 
 fig_density.savefig("HA4/results/Density.png", bbox_inches='tight')
 fig_embedding.savefig("HA4/results/Embedding_function.png", bbox_inches='tight')
 fig_pair_potential.savefig("HA4/results/Pair_potential.png", bbox_inches='tight')
 fig_compare_forces.savefig("HA4/results/Compare_forces.png", bbox_inches='tight')
+
+
+plt.show()
