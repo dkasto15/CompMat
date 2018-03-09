@@ -24,6 +24,7 @@ def main():
     path_SC = 'HA4/downloads/Al-EV-curves/SC.dat'
     V_SC, E_SC, scale_factor = read_data(path_SC)
 
+    al_bulk
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(V_BCC, E_BCC)
