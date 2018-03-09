@@ -42,9 +42,9 @@ def main():
     data_exp = np.append(data_exp, a0)
     data_exp = np.append(data_exp, E0)
 
-    ftol = 1e-8  # 1e-8
-    xtol = 1e-8
-    gtol = 1e-8
+    ftol = 1e-5
+    xtol = 1e-5
+    gtol = 1e-5
     loss = 'linear'
 
     w_force = 1
@@ -53,7 +53,7 @@ def main():
     weights = np.sqrt(np.array([w_force, w_E0, w_a0]))
 
     ''' Least squares optimization procedure '''
-    res = least_squares(calc_residuals,
+    sol = least_squares(calc_residuals,
                         param_0,
                         # method='lm',
                         args=(data_input, data_exp, weights),
@@ -64,18 +64,33 @@ def main():
                         loss=loss,
                         verbose=2)
 
-    write_least_squares_output('1', res)
+    write_least_squares_output('1', sol)
+    x = sol.x
 
-    E0_final = calc_cohesive_energy(data_input[4], A, lmbd, D, mu2)
-    a0_final = calc_lattice_parameter(data_input[3], A, lmbd, D, mu2)
-    with open('HA4/results/output.txt', 'a') as textfile:
+    forces_final = calc_forces(data_input[0:3], x[0], x[1], x[2], x[3])
+    a0_final = calc_lattice_parameter(data_input[3], x[0], x[1], x[2], x[3])
+    E0_final = calc_cohesive_energy(data_input[4], x[0], x[1], x[2], x[3])
+
+    RMS_res = np.sqrt(sum((forces_final - data_exp[:-2])**2) / len(forces_final))
+
+    with open('HA4/results/fit_potential_output.txt', 'w') as textfile:
         line = ''
-        for el in res.x:
+        for el in sol.x:
             line = line + str(el) + ','
         line = line[:-1]
-        textfile.write('\n')
+        line = line + '\n'
         line = line + 'Lattice parameter: ' + str(a0_final) + '\n'
-        line = line + 'Cohesive energy: ' + str(E0_final) + '\n\n'
+        line = line + 'Cohesive energy: ' + str(E0_final) + '\n'
+        line = line + 'Rms of residual: ' + str(RMS_res) + '\n'
+        textfile.write(line)
+
+    with open('HA4/results/fit_potential_force_components.txt', 'w') as textfile:
+        textfile.write('EAM forces, DFT forces \n')
+        text = ''
+        for i in range(len(forces_final)):
+            text = text + str(forces_final[i]) + ',' + str(data_exp[i]) + '\n'
+        text = text[:-1]
+        textfile.write(text)
 
 
 def calc_forces(data_input_forces, A, lmbd, D, mu2):
@@ -144,7 +159,7 @@ def calc_lattice_parameter(al_bulk_ASE, A, lmbd, D, mu2):
     # Calculate the potential energy for the Al bulk
     energies.append(al_bulk_ASE.get_potential_energy())
     volumes.append(al_bulk_ASE.get_volume())
-    #plt.plot((4 * np.asarray(volumes))**(1 / 3), energies)
+    # plt.plot((4 * np.asarray(volumes))**(1 / 3), energies)
     # plt.show()
     # Plot energies as a function of unit cell volume (directly related to latt. const.)
     eos = EquationOfState(volumes, energies)

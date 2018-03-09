@@ -132,10 +132,6 @@ def calc_residuals(optimization_params, data_input, data_exp, weights):
     data_sim = np.append(data_sim, calc_lattice_parameter(data_input[3], A, lmbd, D, mu2))
     data_sim = np.append(data_sim, calc_cohesive_energy(data_input[4], A, lmbd, D, mu2))
 
-    # print(data_sim[-3])
-    # print(data_sim[-2])
-    # print(data_sim[-1])
-
     w_force = weights[0]
     w_E0 = weights[1]
     w_a0 = weights[2]
@@ -145,7 +141,6 @@ def calc_residuals(optimization_params, data_input, data_exp, weights):
     residuals[-2] = w_a0 * residuals[-2]
     residuals[-1] = w_E0 * residuals[-1]
 
-    # print(residuals)
     return residuals
 
 
