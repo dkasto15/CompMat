@@ -13,7 +13,7 @@ def main():
         for line in textfile:
             line = line.split(',')
             V.append(float(line[0]))
-            E_EAM.append(float(line[2]))
+            E_EAM.append(float(line[1]))
 
     V = np.asarray(V)
     E_EAM = np.asarray(E_EAM)
