@@ -32,48 +32,76 @@ def main():
     # param_0 = [A, lmbd, D, mu2]
 
     ''' Strains and stuff '''
+    eV_to_J = 1.60217662 * 10**(-19)
+    angstrom_to_meter = 1e-10
     calc = get_calc((A, lmbd, D, mu2))
     # calc = EMT()
     e1 = 0.01
     e6 = 0.01
     energies = []
+    C11_vec = []
+    C12_vec = []
 
-    # C11-C12
-    al_bulk = bulk('Al', 'fcc', a=4.032)
-    al_bulk.set_calculator(calc)
-    ep_mat_1 = np.array([[e1, 0, 0], [0, -e1, 0], [0, 0, e1**2 / (1 - e1**2)]])
-    energies.append(al_bulk.get_potential_energy())
-    cell_0 = al_bulk.get_cell()
-    al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), cell_0))
-    energies.append(al_bulk.get_potential_energy())
-    V = 4 * al_bulk.get_volume()
-    delta_E = energies[-1] - energies[0]
-    C11_minus_C12 = delta_E / (V * e1**2)
-    print(C11_minus_C12)
+    print(range(0, 0.5, 100))
+    x = np.array(range(0, 0.5, 100))
+    print(x)
+    for i in len(x):
+        e1 = x[i]
+        e6 = x[i]
 
-    # C11+C12
-    al_bulk = bulk('Al', 'fcc', a=4.032)
-    al_bulk.set_calculator(calc)
-    e2 = e1
-    ep_mat_12 = np.array([[e1, 0, 0], [0, e2, 0], [0, 0, 0]])
-    energies.append(al_bulk.get_potential_energy())
-    V = 4 * al_bulk.get_volume() # Equilibrium cell volume
-    cell_0 = al_bulk.get_cell()
-    al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_12), cell_0))
-    energies.append(al_bulk.get_potential_energy())
-    delta_E = energies[-1] - energies[0]
-    C11_plus_C12 = delta_E / (V * e1**2)
-    print(C11_plus_C12)
+        # C11-C12
+        al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
+        al_bulk.set_calculator(calc)
+        ep_mat_1 = np.array([[e1, 0, 0], [0, -e1, 0], [0, 0, e1**2 / (1 - e1**2)]])
+        energies.append(al_bulk.get_potential_energy())
+        cell_0 = al_bulk.get_cell()
+        al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), np.transpose(cell_0)))
+        # al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), cell_0)) Yields same result
+        energies.append(al_bulk.get_potential_energy())
 
-    ## C11 and C12
-    C11 = (C11_minus_C12 + C11_plus_C12) / 2
-    C12 = C11_plus_C12 - C11
+        print(cell_0 / al_bulk.get_cell())
+        print(cell_0)
+        print(al_bulk.get_cell())
+
+        V = 4 * al_bulk.get_volume()
+        delta_E = energies[-1] - energies[0]
+        C11_minus_C12 = delta_E / (V * e1**2)
+        print('Hola', C11_minus_C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+
+        # C11+C12
+        al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
+        al_bulk.set_calculator(calc)
+
+        e2 = e1
+        ep_mat_12 = np.array([[e1, 0, 0], [0, e2, 0], [0, 0, 0]])
+
+        energies.append(al_bulk.get_potential_energy())
+
+        V = 4 * al_bulk.get_volume()  # Equilibrium cell volume
+        cell_0 = al_bulk.get_cell()
+        al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_12), cell_0))
+        energies.append(al_bulk.get_potential_energy())
+        delta_E = energies[-1] - energies[0]
+        C11_plus_C12 = delta_E / (V * e1**2)
+        print(C11_plus_C12)
+
+        # C11 and C12
+        C11 = (C11_minus_C12 + C11_plus_C12) / 2
+        C12 = C11_plus_C12 - C11
+
+        C11_vec.append(C11 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+        C12_vec.append(C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+
+    fig = plt.figure()
+    fig.plot(range(0, 0.5, 100), C11_vec)
 
     # C44
-    al_bulk = bulk('Al', 'fcc', a=4.032)
+    al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
     al_bulk.set_calculator(calc)
-    ep_mat_6 = np.array([[0, 0.5 * e6, 0], [0.5 * e6, 0, 0], [0, 0, e6**2 / (4 - e6**2)]])
     cell_0 = al_bulk.get_cell()
+
+    ep_mat_6 = np.array([[0, 0.5 * e6, 0], [0.5 * e6, 0, 0], [0, 0, e6**2 / (4 - e6**2)]])
+
     al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_6), cell_0))
     energies.append(al_bulk.get_potential_energy())
     V = 4 * al_bulk.get_volume()
@@ -83,8 +111,8 @@ def main():
 
     B = (C11 + 2 * C12) / 3
 
-    eV_to_J = 1.60217662 * 10**(-19)
-    angstrom_to_meter = 1e-10
+    print('C11: ', C11 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+    print('C12: ', C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
     B_SI = B * eV_to_J / (angstrom_to_meter)**3
     B_GPa = B_SI / 1e9
     print('B', B_GPa)
@@ -152,7 +180,8 @@ def main():
     path_100 = [G, X]
 
     # Band structure in meV
-    path_kc_100, q_100, Q_100 = bandpath(path_100, al_bulk.cell, 100) # Return list of k-points, list of x-coordinates and list of x-coordinates of special points.
+    # Return list of k-points, list of x-coordinates and list of x-coordinates of special points.
+    path_kc_100, q_100, Q_100 = bandpath(path_100, al_bulk.cell, 100)
     omega_kn_100 = 1000 * ph.band_structure(path_kc_100)
 
     # # Find the longitudinal curve (the one that is not initially overlapping)
@@ -160,14 +189,14 @@ def main():
     # print(omega_kn_100[0:10,1])
     # print(omega_kn_100[0:10,2]) # <-- This one!
 
-    k = np.sqrt(path_kc_100[:,0]**2 + path_kc_100[:,1]**2 + path_kc_100[:,2]**2) # [Å^-1]
+    k = np.sqrt(path_kc_100[:, 0]**2 + path_kc_100[:, 1]**2 + path_kc_100[:, 2]**2)  # [Å^-1]
     convert_meV_to_1_over_s = (1 / 1000) * (1 / (6.582119514 * 10**(-16)))
     # print(omega_kn_100[1,2])
 
-    omega_long_at_q_to_0 = omega_kn_100[1,2] * convert_meV_to_1_over_s
+    omega_long_at_q_to_0 = omega_kn_100[1, 2] * convert_meV_to_1_over_s
     # omega_long_at_q_to_1 = omega_kn_100[2,2] * convert_meV_to_1_over_s
 
-    c_s = omega_long_at_q_to_0 * 10**(-10) / k[1] # Speed of sound, [m/s]
+    c_s = omega_long_at_q_to_0 * 10**(-10) / k[1]  # Speed of sound, [m/s]
     # c_s = 10**(-10) * ((omega_long_at_q_to_1 - omega_long_at_q_to_0)  / (k[2] - k[1])) # Speed of sound, [m/s]
     print(c_s)
     #
@@ -181,7 +210,6 @@ def main():
     #
     # print(C11)
     # print(young)
-
 
     plt.figure()
     plt.plot(q_100, omega_kn_100)
