@@ -82,6 +82,7 @@ def main():
     print(C44)
 
     B = (C11 + 2 * C12) / 3
+    print('B', B)
     c_prim = (C11 * C12) / 2
 
     ''' Phonon calculator '''
