@@ -1,2 +1,3 @@
-Volume: 33.987036
-Bulk modulus: 46.33843534473441
+Volume (Å^3): 33.987036
+Bulk modulus (GPa): 7424.36878463397
+Bulk modulus (a.u): 46.33843534473441
