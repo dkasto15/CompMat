@@ -63,8 +63,8 @@ def main():
     ''' Calculating bulk modulus using proposed equation '''
     eV_to_J = 1.60217662 * 10**(-19)
     angstrom_to_meter = 1e-10
-    B = min(V) * birch_bulk(res.x, min(V))
-    B_SI = B * eV_to_J / (angstrom_to_meter)**2
+    B = birch_bulk(res.x, min(V))
+    B_SI = B * eV_to_J / (angstrom_to_meter)**3
     B_GPa = B_SI / 1e9
 
     with open('HA4/results/Bulk_modulus_birch.txt', 'w') as textfile:
@@ -90,7 +90,8 @@ def birch_energy(x, V):
 
 def birch_bulk(x, V):
     B = 0
-    dV = 1e-8
+
+    dV = 1e-5
     ddE_ddV = (birch_energy(x, V + dV) - 2 * birch_energy(x, V) +
                birch_energy(x, V - dV)) / dV**2
     for n in range(len(x)):
