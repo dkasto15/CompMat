@@ -90,10 +90,6 @@ def birch_energy(x, V):
 
 def birch_bulk(x, V):
     B = 0
-
-    dV = 1e-5
-    ddE_ddV = (birch_energy(x, V + dV) - 2 * birch_energy(x, V) +
-               birch_energy(x, V - dV)) / dV**2
     for n in range(len(x)):
         ddE_ddV = ((4 * n**2 + 6 * n) / 9 * V**((-2 * n - 6) / 3)) * x[n]
         B = B + V * ddE_ddV
