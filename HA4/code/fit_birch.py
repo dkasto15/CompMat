@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import least_squares
 import matplotlib.pyplot as plt
+from scipy.misc import derivative
 
 
 def main():
@@ -60,11 +61,16 @@ def main():
     ax_compare.set_ylabel('Cohesive energy [eV]')
 
     ''' Calculating bulk modulus using proposed equation '''
+    atomic_units_to_newton = (82.387 / 51.421) * 1e-9
+    angstrom_to_meter = 1e-10
     B = min(V) * birch_bulk(res.x, min(V))
+    B_SI = B * atomic_units_to_newton / (angstrom_to_meter)**2
+    B_GPa = B_SI / 1e9
 
     with open('HA4/results/Bulk_modulus_birch.txt', 'w') as textfile:
-        textfile.write('Volume: ' + str(min(V)) + '\n')
-        textfile.write('Bulk modulus: ' + str(B))
+        textfile.write('Volume (Å^3): ' + str(min(V)) + '\n')
+        textfile.write('Bulk modulus (GPa): ' + str(B_GPa) + '\n')
+        textfile.write('Bulk modulus (a.u): ' + str(B))
 
     fig_converge.savefig("HA4/results/Converge_n_birch.png", bbox_inches='tight')
     fig_compare.savefig("HA4/results/Compare_data_birch.png", bbox_inches='tight')
@@ -84,6 +90,9 @@ def birch_energy(x, V):
 
 def birch_bulk(x, V):
     B = 0
+    dV = 1e-8
+    ddE_ddV = (birch_energy(x, V + dV) - 2 * birch_energy(x, V) +
+               birch_energy(x, V - dV)) / dV**2
     for n in range(len(x)):
         ddE_ddV = ((4 * n**2 + 6 * n) / 9 * V**((-2 * n - 6) / 3)) * x[n]
         B = B + V * ddE_ddV
