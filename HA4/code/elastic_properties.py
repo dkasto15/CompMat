@@ -41,13 +41,12 @@ def main():
     energies = []
     C11_vec = []
     C12_vec = []
+    B_vec = []
 
-    print(range(0, 0.5, 100))
-    x = np.array(range(0, 0.5, 100))
-    print(x)
-    for i in len(x):
-        e1 = x[i]
-        e6 = x[i]
+    x = np.linspace(0, 0.5, 100)
+    for i in x:
+        e1 = i
+        e6 = i
 
         # C11-C12
         al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
@@ -55,18 +54,18 @@ def main():
         ep_mat_1 = np.array([[e1, 0, 0], [0, -e1, 0], [0, 0, e1**2 / (1 - e1**2)]])
         energies.append(al_bulk.get_potential_energy())
         cell_0 = al_bulk.get_cell()
-        al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), np.transpose(cell_0)))
-        # al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), cell_0)) Yields same result
+        # al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), np.transpose(cell_0)))
+        al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_1), cell_0)) # Yields same result
         energies.append(al_bulk.get_potential_energy())
 
-        print(cell_0 / al_bulk.get_cell())
-        print(cell_0)
-        print(al_bulk.get_cell())
+        # print(cell_0 / al_bulk.get_cell())
+        # print(cell_0)
+        # print(al_bulk.get_cell())
 
-        V = 4 * al_bulk.get_volume()
+        V = al_bulk.get_volume() #4 * al_bulk.get_volume()
         delta_E = energies[-1] - energies[0]
         C11_minus_C12 = delta_E / (V * e1**2)
-        print('Hola', C11_minus_C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+        # print('Hola', C11_minus_C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
 
         # C11+C12
         al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
@@ -77,13 +76,13 @@ def main():
 
         energies.append(al_bulk.get_potential_energy())
 
-        V = 4 * al_bulk.get_volume()  # Equilibrium cell volume
+        V = al_bulk.get_volume() #4 * al_bulk.get_volume()  # Equilibrium cell volume
         cell_0 = al_bulk.get_cell()
         al_bulk.set_cell(np.dot((np.eye(3) + ep_mat_12), cell_0))
         energies.append(al_bulk.get_potential_energy())
         delta_E = energies[-1] - energies[0]
         C11_plus_C12 = delta_E / (V * e1**2)
-        print(C11_plus_C12)
+        # print(C11_plus_C12)
 
         # C11 and C12
         C11 = (C11_minus_C12 + C11_plus_C12) / 2
@@ -92,8 +91,15 @@ def main():
         C11_vec.append(C11 * eV_to_J / (angstrom_to_meter**3 * 1e9))
         C12_vec.append(C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
 
-    fig = plt.figure()
-    fig.plot(range(0, 0.5, 100), C11_vec)
+        B_vec.append(((C11 + 2 * C12) / 3) * eV_to_J / (angstrom_to_meter**3 * 1e9))
+
+    plt.figure()
+    plt.plot(x, C11_vec)
+    plt.plot(x, C12_vec)
+    plt.plot(x, B_vec)
+    plt.set_xlabel(r'Displacement factor $\varepsilon_1 = \varepsilon_2 \varepsilon_6 $')
+    plt.set_ylabel('Elastic constants/Bulk modulus [GPa]')
+    plt.show()
 
     # C44
     al_bulk = bulk('Al', 'fcc', a=4.032, cubic=True)
@@ -107,15 +113,15 @@ def main():
     V = 4 * al_bulk.get_volume()
     delta_E = energies[-1] - energies[0]
     C44 = 2 * delta_E / (V * e6**2)
-    print(C44)
+    # print(C44)
 
     B = (C11 + 2 * C12) / 3
 
-    print('C11: ', C11 * eV_to_J / (angstrom_to_meter**3 * 1e9))
-    print('C12: ', C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+    # print('C11: ', C11 * eV_to_J / (angstrom_to_meter**3 * 1e9))
+    # print('C12: ', C12 * eV_to_J / (angstrom_to_meter**3 * 1e9))
     B_SI = B * eV_to_J / (angstrom_to_meter)**3
     B_GPa = B_SI / 1e9
-    print('B', B_GPa)
+    # print('B', B_GPa)
 
     c_prim = (C11 * C12) / 2
 
