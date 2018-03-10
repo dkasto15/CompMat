@@ -83,8 +83,12 @@ def main():
 
     B = (C11 + 2 * C12) / 3
 
+    eV_to_J = 1.60217662 * 10**(-19)
+    angstrom_to_meter = 1e-10
+    B_SI = B * eV_to_J / (angstrom_to_meter)**3
+    B_GPa = B_SI / 1e9
+    print('B', B_GPa)
 
-    print('B', B)
     c_prim = (C11 * C12) / 2
 
     ''' Phonon calculator '''
