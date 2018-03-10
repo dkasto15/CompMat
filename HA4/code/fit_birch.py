@@ -61,10 +61,10 @@ def main():
     ax_compare.set_ylabel('Cohesive energy [eV]')
 
     ''' Calculating bulk modulus using proposed equation '''
-    atomic_units_to_newton = (82.387 / 51.421) * 1e-9
+    eV_to_J = 1.60217662 * 10**(-19)
     angstrom_to_meter = 1e-10
     B = min(V) * birch_bulk(res.x, min(V))
-    B_SI = B * atomic_units_to_newton / (angstrom_to_meter)**2
+    B_SI = B * eV_to_J / (angstrom_to_meter)**2
     B_GPa = B_SI / 1e9
 
     with open('HA4/results/Bulk_modulus_birch.txt', 'w') as textfile:
